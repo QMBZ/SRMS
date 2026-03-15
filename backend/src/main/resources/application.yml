@@ -28,3 +28,8 @@ springdoc:
     enabled: true # 开启OpenApi接口
   swagger-ui:
     enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
+
+# jwt 相关配置
+jwt:
+  secret: haohao123456  # 密钥
+  expire: 7200000       # 2 小时过期

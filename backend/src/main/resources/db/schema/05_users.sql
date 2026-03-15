@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-    user_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID（主键）',
+    user_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID（主键）',
     username VARCHAR(30) NOT NULL UNIQUE COMMENT '登录账号（学生用学号，老师用工号）',
     password VARCHAR(64) NOT NULL COMMENT '登录密码（建议加密存储，如MD5/SHA256）',
     real_name VARCHAR(20) NOT NULL COMMENT '真实姓名',
