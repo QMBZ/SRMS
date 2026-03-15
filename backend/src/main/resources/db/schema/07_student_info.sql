@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS student_info (
     native_place VARCHAR(50) DEFAULT '' COMMENT '籍贯（如XX省XX市）',
     phone VARCHAR(11) DEFAULT '' COMMENT '手机号',
     email VARCHAR(50) DEFAULT '' COMMENT '邮箱',
-    photo_url VARCHAR(255) DEFAULT '' COMMENT '照片存储路径（如/photo/2021001.jpg）',
+    photo_url VARCHAR(255) DEFAULT 'https://api.dicebear.com/9.x/shapes/svg' COMMENT '照片存储路径（如/photo/2021001.jpg）',
     college_id INT NOT NULL COMMENT '关联学院ID',
     major_id INT NOT NULL COMMENT '关联专业ID',
     class_id INT NOT NULL COMMENT '关联班级ID',

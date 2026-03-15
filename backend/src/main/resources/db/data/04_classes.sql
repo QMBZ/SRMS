@@ -1,5 +1,3 @@
-TRUNCATE TABLE classes;
-
 -- 计算机学院 01
 INSERT INTO classes (class_name, class_code, major_id, college_id)
 VALUES

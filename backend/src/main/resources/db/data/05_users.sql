@@ -1,5 +1,3 @@
-TRUNCATE TABLE users;
-
 -- 超级管理员
 INSERT INTO users (username, password, real_name, role_id, status)
 VALUES ('admin', '123456', '系统管理员', 1, 1);

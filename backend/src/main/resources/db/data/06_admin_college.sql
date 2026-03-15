@@ -1,5 +1,3 @@
-TRUNCATE TABLE admin_college;
-
 INSERT INTO admin_college (user_id, college_id)
 VALUES
 (2, 1),  -- admin01 管 计算机学院

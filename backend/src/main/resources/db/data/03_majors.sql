@@ -1,5 +1,3 @@
-TRUNCATE TABLE majors;
-
 -- 01计算机学院
 INSERT INTO majors (major_name, major_code, college_id) VALUES
 ('计算机科学与技术', '0101', 1),
