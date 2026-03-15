@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS roles (
+    role_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '角色ID（主键）：（1-超级管理员/2-学院管理员/3-老师/4-学生）',
+    role_name VARCHAR(20) NOT NULL COMMENT '角色名称（前端展示）',
+    role_desc VARCHAR(100) DEFAULT '' COMMENT '角色描述',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT = '角色表';

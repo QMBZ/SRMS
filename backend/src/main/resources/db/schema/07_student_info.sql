@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS student_info (
+    student_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '学生ID（主键）',
+    student_no VARCHAR(20) NOT NULL UNIQUE COMMENT '学号（唯一标识）',
+    real_name VARCHAR(20) NOT NULL COMMENT '学生姓名',
+    gender VARCHAR(10) NOT NULL COMMENT '性别（男/女/其他）',
+    id_card VARCHAR(18) NOT NULL UNIQUE COMMENT '身份证号',
+    nation VARCHAR(10) DEFAULT '汉族' COMMENT '民族',
+    native_place VARCHAR(50) DEFAULT '' COMMENT '籍贯（如XX省XX市）',
+    phone VARCHAR(11) DEFAULT '' COMMENT '手机号',
+    email VARCHAR(50) DEFAULT '' COMMENT '邮箱',
+    photo_url VARCHAR(255) DEFAULT '' COMMENT '照片存储路径（如/photo/2021001.jpg）',
+    college_id INT NOT NULL COMMENT '关联学院ID',
+    major_id INT NOT NULL COMMENT '关联专业ID',
+    class_id INT NOT NULL COMMENT '关联班级ID',
+    enrollment_time DATE NOT NULL COMMENT '入学时间',
+    graduation_time DATE DEFAULT NULL COMMENT '毕业时间',
+    student_status VARCHAR(20) DEFAULT '在读' COMMENT '学籍状态：在读/休学/复学/保留/毕业/结业/退学/开除',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (college_id) REFERENCES colleges(college_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (major_id) REFERENCES majors(major_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES classes(class_id) ON DELETE RESTRICT ON UPDATE CASCADE
+) COMMENT = '学生基本信息表';
