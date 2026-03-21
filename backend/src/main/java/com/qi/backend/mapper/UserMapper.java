@@ -19,4 +19,19 @@ public interface UserMapper {
 
     // 通过账号状态筛选
     List<User> selectUsersByStatus(Integer status);
+
+    // 分页查询所有用户（配合 PageHelper 使用）
+    List<User> selectUserByPage();
+
+    // 多条件分页查询（支持：姓名、用户名、角色、状态）
+    List<User> selectUserByConditionPage(User user);
+
+    // 新增用户
+    int insertUser(User user);
+
+    // 修改用户
+    int updateUser(User user);
+
+    // 修改用户状态（禁用/启用）
+    int updateUserStatus(Long userId, Integer status);
 }
