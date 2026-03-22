@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qi.backend.mapper.CollegeMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="CollegeResultMap" type="com.qi.backend.entity.College">
+        <id column="college_id" property="collegeId"/>
+        <result column="college_name" property="collegeName"/>
+        <result column="college_code" property="collegeCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 获取所有学院 -->
+    <select id="selectAllColleges" resultMap="CollegeResultMap">
+        select * from colleges
+    </select>
+
+    <!-- 根据ID获取学院 -->
+    <select id="selectCollegeById" resultMap="CollegeResultMap">
+        select * from colleges where college_id = #{collegeId}
+    </select>
+
+    <!-- 根据学院编码获取学院 -->
+    <select id="selectCollegeByCode" resultMap="CollegeResultMap">
+        select * from colleges where college_code = #{collegeCode}
+    </select>
+
+    <!-- 分页查询所有学院 -->
+    <select id="selectCollegesByPage" resultMap="CollegeResultMap">
+        select * from colleges order by create_time desc
+    </select>
+
+    <!-- 多条件分页查询 -->
+    <select id="selectCollegesByConditionPage" resultMap="CollegeResultMap">
+        select * from colleges
+        <where>
+            <if test="collegeName != null and collegeName != ''">
+                and college_name like concat('%', #{collegeName}, '%')
+            </if>
+            <if test="collegeCode != null and collegeCode != ''">
+                and college_code like concat('%', #{collegeCode}, '%')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 新增学院 -->
+    <insert id="insertCollege">
+        insert into colleges(college_name, college_code)
+        values(#{collegeName}, #{collegeCode})
+    </insert>
+
+    <!-- 修改学院 -->
+    <update id="updateCollege">
+        update colleges
+        <set>
+            <if test="collegeName != null and collegeName != ''">
+                college_name = #{collegeName},
+            </if>
+            <if test="collegeCode != null and collegeCode != ''">
+                college_code = #{collegeCode},
+            </if>
+        </set>
+        where college_id = #{collegeId}
+    </update>
+
+</mapper>

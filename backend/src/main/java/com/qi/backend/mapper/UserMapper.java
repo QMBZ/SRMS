@@ -21,10 +21,10 @@ public interface UserMapper {
     List<User> selectUsersByStatus(Integer status);
 
     // 分页查询所有用户（配合 PageHelper 使用）
-    List<User> selectUserByPage();
+    List<User> selectUsersByPage();
 
     // 多条件分页查询（支持：姓名、用户名、角色、状态）
-    List<User> selectUserByConditionPage(User user);
+    List<User> selectUsersByConditionPage(User user);
 
     // 新增用户
     int insertUser(User user);

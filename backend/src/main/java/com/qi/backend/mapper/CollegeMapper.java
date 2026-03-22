@@ -13,4 +13,16 @@ public interface CollegeMapper {
 
     // 根据学院代码获取学院
     College selectCollegeByCode(String collegeCode);
+
+    // 分页查询所有学院
+    List<College> selectCollegesByPage();
+
+    // 多条件分页查询
+    List<College> selectCollegesByConditionPage(College college);
+
+    // 新增学院
+    int insertCollege(College college);
+
+    // 修改学院
+    int updateCollege(College college);
 }

@@ -28,4 +28,16 @@ public interface StudentInfoMapper {
 
     // 根据学籍状态查询下学生列表
     List<StudentInfo> selectStudentInfosByStatus(String studentStatus);
+
+    // 分页查询所有学生信息（配合 PageHelper 使用）
+    List<StudentInfo> selectStudentInfosByPage();
+
+    // 多条件分页查询
+    List<StudentInfo> selectStudentInfosByConditionPage(StudentInfo studentInfo);
+
+    // 新增学生信息
+    int insertStudentInfo(StudentInfo studentInfo);
+
+    // 根据 ID 修改学生信息
+    int updateStudentInfoById(StudentInfo studentInfo);
 }

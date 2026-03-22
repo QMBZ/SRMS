@@ -10,4 +10,10 @@ public interface RoleMapper {
 
     // 根据 ID 获取角色
     Role selectRoleById(Integer roleId);
+
+    // 新增角色
+    int insertRole(Role role);
+
+    // 修改角色
+    int updateRole(Role role);
 }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qi.backend.mapper.StudentInfoMapper">
+    <!-- 结果映射 -->
+    <resultMap id="StudentInfoResultMap" type="com.qi.backend.entity.StudentInfo">
+        <id column="student_id" property="studentId"/>
+        <result column="student_no" property="studentNo"/>
+        <result column="real_name" property="realName"/>
+        <result column="gender" property="gender"/>
+        <result column="id_card" property="idCard"/>
+        <result column="nation" property="nation"/>
+        <result column="native_place" property="nativePlace"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="photo_url" property="photoUrl"/>
+        <result column="college_id" property="collegeId"/>
+        <result column="major_id" property="majorId"/>
+        <result column="class_id" property="classId"/>
+        <result column="enrollment_time" property="enrollmentTime"/>
+        <result column="graduation_time" property="graduationTime"/>
+        <result column="student_status" property="studentStatus"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 获取所有学生信息 -->
+    <select id="selectAllStudentInfos" resultMap="StudentInfoResultMap">
+        select * from student_info
+    </select>
+
+    <!-- 根据 ID 获取学生信息 -->
+    <select id="selectStudentInfoById" resultMap="StudentInfoResultMap">
+        select * from student_info where student_id = #{studentId}
+    </select>
+
+    <!-- 根据学号获取学生信息 -->
+    <select id="selectStudentInfoByStudentNo" resultMap="StudentInfoResultMap">
+        select * from student_info where student_no = #{studentNo}
+    </select>
+
+    <!-- 根据身份证号获取学生信息 -->
+    <select id="selectStudentInfoByIdCard" resultMap="StudentInfoResultMap">
+        select * from student_info where id_card = #{idCard}
+    </select>
+
+    <!-- 根据学院ID查询学生列表 -->
+    <select id="selectStudentInfosByCollegeId" resultMap="StudentInfoResultMap">
+        select * from student_info where college_id = #{collegeId}
+    </select>
+
+    <!-- 根据专业ID查询学生列表 -->
+    <select id="selectStudentInfosByMajorId" resultMap="StudentInfoResultMap">
+        select * from student_info where major_id = #{majorId}
+    </select>
+
+    <!-- 根据班级ID查询学生列表 -->
+    <select id="selectStudentInfosByClassId" resultMap="StudentInfoResultMap">
+        select * from student_info where class_id = #{classId}
+    </select>
+
+    <!-- 根据学籍状态查询学生列表 -->
+    <select id="selectStudentInfosByStatus" resultMap="StudentInfoResultMap">
+        select * from student_info where student_status = #{studentStatus}
+    </select>
+
+    <!-- 分页查询所有学生信息（配合 PageHelper 使用） -->
+    <select id="selectStudentInfosByPage" resultMap="StudentInfoResultMap">
+        select * from student_info order by create_time desc
+    </select>
+
+    <!-- 多条件分页查询 -->
+    <select id="selectStudentInfosByConditionPage" resultMap="StudentInfoResultMap">
+        select * from student_info
+        <where>
+            <if test="studentNo != null and studentNo != ''">
+                and student_no like concat('%', #{studentNo}, '%')
+            </if>
+            <if test="realName != null and realName != ''">
+                and real_name like concat('%', #{realName}, '%')
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="idCard != null and idCard != ''">
+                and id_card like concat('%', #{idCard}, '%')
+            </if>
+            <if test="nation != null and nation != ''">
+                and nation = #{nation}
+            </if>
+            <if test="collegeId != null">
+                and college_id = #{collegeId}
+            </if>
+            <if test="majorId != null">
+                and major_id = #{majorId}
+            </if>
+            <if test="classId != null">
+                and class_id = #{classId}
+            </if>
+            <if test="studentStatus != null and studentStatus != ''">
+                and student_status = #{studentStatus}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 新增学生信息 -->
+    <insert id="insertStudentInfo">
+        insert into student_info(
+            student_no, real_name, gender, id_card, nation, native_place,
+            phone, email, photo_url, college_id, major_id, class_id,
+            enrollment_time, graduation_time, student_status
+        ) values (
+            #{studentNo}, #{realName}, #{gender}, #{idCard}, #{nation}, #{nativePlace},
+            #{phone}, #{email}, #{photoUrl}, #{collegeId}, #{majorId}, #{classId},
+            #{enrollmentTime}, #{graduationTime}, #{studentStatus}
+        )
+    </insert>
+
+    <!-- 根据 ID 修改学生信息 -->
+    <update id="updateStudentInfoById">
+        update student_info
+        <set>
+            <if test="studentNo != null">student_no = #{studentNo},</if>
+            <if test="realName != null">real_name = #{realName},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="nation != null">nation = #{nation},</if>
+            <if test="nativePlace != null">native_place = #{nativePlace},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="photoUrl != null">photo_url = #{photoUrl},</if>
+            <if test="collegeId != null">college_id = #{collegeId},</if>
+            <if test="majorId != null">major_id = #{majorId},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="enrollmentTime != null">enrollment_time = #{enrollmentTime},</if>
+            <if test="graduationTime != null">graduation_time = #{graduationTime},</if>
+            <if test="studentStatus != null">student_status = #{studentStatus},</if>
+        </set>
+        where student_id = #{studentId}
+    </update>
+</mapper>

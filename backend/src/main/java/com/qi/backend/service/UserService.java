@@ -57,7 +57,7 @@ public class UserService {
     public PageInfo<User> getUserByPage(Integer pageNum, Integer pageSize) {
         // 开启分页
         PageHelper.startPage(pageNum, pageSize);
-        List<User> list = userMapper.selectUserByPage();
+        List<User> list = userMapper.selectUsersByPage();
         // 包装成分页结果
         return new PageInfo<>(list);
     }
@@ -67,7 +67,7 @@ public class UserService {
      */
     public PageInfo<User> getUserByConditionPage(User user, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<User> list = userMapper.selectUserByConditionPage(user);
+        List<User> list = userMapper.selectUsersByConditionPage(user);
         return new PageInfo<>(list);
     }
 

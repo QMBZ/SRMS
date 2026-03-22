@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qi.backend.mapper.MajorMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="MajorResultMap" type="com.qi.backend.entity.Major">
+        <id column="major_id" property="majorId"/>
+        <result column="major_name" property="majorName"/>
+        <result column="major_code" property="majorCode"/>
+        <result column="college_id" property="collegeId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 获取所有专业 -->
+    <select id="selectAllMajors" resultMap="MajorResultMap">
+        select * from majors
+    </select>
+
+    <!-- 根据ID获取专业 -->
+    <select id="selectMajorById" resultMap="MajorResultMap">
+        select * from majors where major_id = #{majorId}
+    </select>
+
+    <!-- 根据专业编码获取专业 -->
+    <select id="selectMajorByCode" resultMap="MajorResultMap">
+        select * from majors where major_code = #{majorCode}
+    </select>
+
+    <!-- 根据学院ID查询专业 -->
+    <select id="selectMajorsByCollegeId" resultMap="MajorResultMap">
+        select * from majors where college_id = #{collegeId}
+    </select>
+
+    <!-- 分页查询所有专业 -->
+    <select id="selectMajorsByPage" resultMap="MajorResultMap">
+        select * from majors order by create_time desc
+    </select>
+
+    <!-- 多条件分页查询 -->
+    <select id="selectMajorsByConditionPage" resultMap="MajorResultMap">
+        select * from majors
+        <where>
+            <if test="majorName != null and majorName != ''">
+                and major_name like concat('%', #{majorName}, '%')
+            </if>
+            <if test="majorCode != null and majorCode != ''">
+                and major_code like concat('%', #{majorCode}, '%')
+            </if>
+            <if test="collegeId != null">
+                and college_id = #{collegeId}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 新增专业 -->
+    <insert id="insertMajor">
+        insert into majors(major_name, major_code, college_id)
+        values(#{majorName}, #{majorCode}, #{collegeId})
+    </insert>
+
+    <!-- 修改专业 -->
+    <update id="updateMajor">
+        update majors
+        <set>
+            <if test="majorName != null and majorName != ''">
+                major_name = #{majorName},
+            </if>
+            <if test="majorCode != null and majorCode != ''">
+                major_code = #{majorCode},
+            </if>
+            <if test="collegeId != null">
+                college_id = #{collegeId},
+            </if>
+        </set>
+        where major_id = #{majorId}
+    </update>
+
+</mapper>

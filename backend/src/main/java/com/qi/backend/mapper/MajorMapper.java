@@ -13,4 +13,19 @@ public interface MajorMapper {
 
     // 根据专业代码获取专业
     Major selectMajorByCode(String majorCode);
+
+    // 根据学院ID查询专业列表
+    List<Major> selectMajorsByCollegeId(Long collegeId);
+
+    // 分页查询所有专业
+    List<Major> selectMajorsByPage();
+
+    // 多条件分页查询
+    List<Major> selectMajorsByConditionPage(Major major);
+
+    // 新增专业
+    int insertMajor(Major major);
+
+    // 修改专业
+    int updateMajor(Major major);
 }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qi.backend.mapper.ClassesMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="ClassesResultMap" type="com.qi.backend.entity.Classes">
+        <id column="class_id" property="classId"/>
+        <result column="class_name" property="className"/>
+        <result column="class_code" property="classCode"/>
+        <result column="major_id" property="majorId"/>
+        <result column="college_id" property="collegeId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 获取所有班级 -->
+    <select id="selectAllClasses" resultMap="ClassesResultMap">
+        select * from classes
+    </select>
+
+    <!-- 根据ID获取班级 -->
+    <select id="selectClassById" resultMap="ClassesResultMap">
+        select * from classes where class_id = #{classId}
+    </select>
+
+    <!-- 根据班级编码获取班级 -->
+    <select id="selectClassByCode" resultMap="ClassesResultMap">
+        select * from classes where class_code = #{classCode}
+    </select>
+
+    <!-- 根据专业ID查询班级 -->
+    <select id="selectClassesByMajorId" resultMap="ClassesResultMap">
+        select * from classes where major_id = #{majorId}
+    </select>
+
+    <!-- 根据学院ID查询班级 -->
+    <select id="selectClassesByCollegeId" resultMap="ClassesResultMap">
+        select * from classes where college_id = #{collegeId}
+    </select>
+
+    <!-- 分页查询所有班级 -->
+    <select id="selectClassesByPage" resultMap="ClassesResultMap">
+        select * from classes order by create_time desc
+    </select>
+
+    <!-- 多条件分页查询 -->
+    <select id="selectClassesByConditionPage" resultMap="ClassesResultMap">
+        select * from classes
+        <where>
+            <if test="className != null and className != ''">
+                and class_name like concat('%', #{className}, '%')
+            </if>
+            <if test="classCode != null and classCode != ''">
+                and class_code like concat('%', #{classCode}, '%')
+            </if>
+            <if test="majorId != null">
+                and major_id = #{majorId}
+            </if>
+            <if test="collegeId != null">
+                and college_id = #{collegeId}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 新增班级 -->
+    <insert id="insertClass">
+        insert into classes(class_name, class_code, major_id, college_id)
+        values(#{className}, #{classCode}, #{majorId}, #{collegeId})
+    </insert>
+
+    <!-- 修改班级 -->
+    <update id="updateClass">
+        update classes
+        <set>
+            <if test="className != null and className != ''">
+                class_name = #{className},
+            </if>
+            <if test="classCode != null and classCode != ''">
+                class_code = #{classCode},
+            </if>
+            <if test="majorId != null">
+                major_id = #{majorId},
+            </if>
+            <if test="collegeId != null">
+                college_id = #{collegeId},
+            </if>
+        </set>
+        where class_id = #{classId}
+    </update>
+
+</mapper>
