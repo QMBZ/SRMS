@@ -4,6 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.qi.backend.entity.StudentInfo;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.StudentInfoService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
+@Tag(name = "学生信息管理")
 public class StudentInfoController {
 
     private final StudentInfoService studentInfoService;
@@ -22,6 +26,7 @@ public class StudentInfoController {
     /**
      * 获取所有学生信息
      */
+    @Operation(summary = "获取所有学生信息")
     @PostMapping("/getAllStudentInfos")
     public Result<List<StudentInfo>> getAllStudentInfos() {
         List<StudentInfo> studentList = studentInfoService.getAllStudentInfos();
@@ -32,6 +37,7 @@ public class StudentInfoController {
      * 根据学生ID查询学生
      * 前端传：{ "studentId": 1 }
      */
+    @Operation(summary = "根据学生ID查询学生", description = "前端传：{ \"studentId\": 1 }")
     @PostMapping("/getStudentInfoById")
     public Result<StudentInfo> getStudentInfoById(@RequestBody Long studentId) {
         if (studentId == null) {
@@ -45,6 +51,7 @@ public class StudentInfoController {
      * 根据学号查询学生
      * 前端传：{ "studentNo": "2026001" }
      */
+    @Operation(summary = "根据学号查询学生", description = "前端传：{ \"studentNo\": \"2026001\" }")
     @PostMapping("/getStudentInfoByStudentNo")
     public Result<StudentInfo> getStudentInfoByStudentNo(@RequestBody String studentNo) {
         if (studentNo == null || studentNo.trim().isEmpty()) {
@@ -58,6 +65,7 @@ public class StudentInfoController {
      * 根据身份证号查询学生
      * 前端传：{ "idCard": "110101..." }
      */
+    @Operation(summary = "根据身份证号查询学生", description = "前端传：{ \"idCard\": \"110101...\" }")
     @PostMapping("/getStudentInfoByIdCard")
     public Result<StudentInfo> getStudentInfoByIdCard(@RequestBody String idCard) {
         if (idCard == null || idCard.trim().isEmpty()) {
@@ -71,6 +79,7 @@ public class StudentInfoController {
      * 根据学院ID查询学生列表
      * 前端传：{ "collegeId": 1 }
      */
+    @Operation(summary = "根据学院ID查询学生列表", description = "前端传：{ \"collegeId\": 1 }")
     @PostMapping("/getStudentInfosByCollegeId")
     public Result<List<StudentInfo>> getStudentInfosByCollegeId(@RequestBody Long collegeId) {
         if (collegeId == null) {
@@ -84,6 +93,7 @@ public class StudentInfoController {
      * 根据专业ID查询学生列表
      * 前端传：{ "majorId": 1 }
      */
+    @Operation(summary = "根据专业ID查询学生列表", description = "前端传：{ \"majorId\": 1 }")
     @PostMapping("/getStudentInfosByMajorId")
     public Result<List<StudentInfo>> getStudentInfosByMajorId(@RequestBody Long majorId) {
         if (majorId == null) {
@@ -97,6 +107,7 @@ public class StudentInfoController {
      * 根据班级ID查询学生列表
      * 前端传：{ "classId": 1 }
      */
+    @Operation(summary = "根据班级ID查询学生列表", description = "前端传：{ \"classId\": 1 }")
     @PostMapping("/getStudentInfosByClassId")
     public Result<List<StudentInfo>> getStudentInfosByClassId(@RequestBody Long classId) {
         if (classId == null) {
@@ -110,6 +121,7 @@ public class StudentInfoController {
      * 根据学籍状态查询学生列表
      * 前端传：{ "studentStatus": "在读" }
      */
+    @Operation(summary = "根据学籍状态查询学生列表", description = "前端传：{ \"studentStatus\": \"在读\" }")
     @PostMapping("/getStudentInfosByStatus")
     public Result<List<StudentInfo>> getStudentInfosByStatus(@RequestBody String studentStatus) {
         if (studentStatus == null || studentStatus.trim().isEmpty()) {
@@ -123,6 +135,7 @@ public class StudentInfoController {
      * 分页查询学生
      * 前端传：{ "pageNum": 1, "pageSize": 10 }
      */
+    @Operation(summary = "分页查询学生", description = "前端传：{ \"pageNum\": 1, \"pageSize\": 10 }")
     @PostMapping("/getStudentInfoByPage")
     public Result<PageInfo<StudentInfo>> getStudentInfoByPage(Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
@@ -136,6 +149,7 @@ public class StudentInfoController {
      * 多条件分页查询学生
      * 前端直接传 StudentInfo 对象 + pageNum、pageSize
      */
+    @Operation(summary = "多条件分页查询学生", description = "前端直接传 StudentInfo 对象 + pageNum、pageSize")
     @PostMapping("/getStudentInfoByConditionPage")
     public Result<PageInfo<StudentInfo>> getStudentInfoByConditionPage(@RequestBody StudentInfo studentInfo, Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
@@ -148,6 +162,7 @@ public class StudentInfoController {
     /**
      * 新增学生信息
      */
+    @Operation(summary = "新增学生信息")
     @PostMapping("/addStudentInfo")
     public Result<Boolean> addStudentInfo(@RequestBody StudentInfo studentInfo) {
         Boolean success = studentInfoService.addStudentInfo(studentInfo);
@@ -160,6 +175,7 @@ public class StudentInfoController {
     /**
      * 修改学生信息
      */
+    @Operation(summary = "修改学生信息")
     @PostMapping("/updateStudentInfo")
     public Result<Boolean> updateStudentInfo(@RequestBody StudentInfo studentInfo) {
         if (studentInfo.getStudentId() == null) {

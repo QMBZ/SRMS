@@ -39,7 +39,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")         // 拦截所有请求
                 .excludePathPatterns(           // 放行接口
                         "/auth/login",          // 登录
-                        "/auth/register"        // 注册
+                        "/auth/register",       // 注册
+                        "/swagger-ui/**",       // API 文档
+                        "/h2-console"           // h2 控制台
                 );
     }
 }

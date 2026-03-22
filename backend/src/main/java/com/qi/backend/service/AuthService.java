@@ -1,12 +1,10 @@
 package com.qi.backend.service;
 
-import org.springframework.stereotype.Service;
-
 import com.qi.backend.entity.User;
 import com.qi.backend.util.JwtUtil;
 import com.qi.backend.util.security.crypto.password.PasswordEncoder;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -25,17 +23,17 @@ public class AuthService {
         // 根据用户名查询用户
         User user = userService.getUserByUsername(username);
         if (user == null) {
-            return "用户不存在";
+            throw new RuntimeException("用户不存在");
         }
 
         // 验证账号状态
         if (user.getStatus() == 0) {
-            return "账号已被禁用，请联系管理员";
+            throw new RuntimeException("账号已被禁用，请联系管理员");
         }
 
         // 验证密码
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            return "密码错误";
+            throw new RuntimeException("密码错误");
         }
 
         // 用户类型
@@ -54,7 +52,7 @@ public class AuthService {
         // 1. 校验用户名是否已存在
         User existUser = userService.getUserByUsername(user.getUserName());
         if (existUser != null) {
-           return false;
+            return false;
         }
 
         // 2. 密码加密
@@ -73,11 +71,8 @@ public class AuthService {
 
     /**
      * 用户登出
-     * 说明：JWT 无状态，无需服务端存储，登出只需前端删除 Token 即可
-     * 这里提供服务端标准登出方法，可扩展黑名单功能
      */
     public void logout() {
-        // 无状态 JWT：前端删除 localStorage/sessionStorage 中的 token 即可完成登出
-        // 如果需要黑名单，可在这里添加 token 到黑名单（需要配合拦截器使用）
+        // 扩展：可加入Token黑名单
     }
 }

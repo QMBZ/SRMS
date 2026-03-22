@@ -4,6 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.qi.backend.entity.User;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Tag(name = "用户管理")
 public class UserController {
 
     private final UserService userService;
@@ -23,6 +27,7 @@ public class UserController {
      * 获取所有用户
      * 前端传：{}
      */
+    @Operation(summary = "获取所有用户", description = "前端传：{}")
     @PostMapping("/getAllUsers")
     public Result<List<User>> getAllUsers() {
         List<User> userList = userService.getAllUsers();
@@ -33,6 +38,7 @@ public class UserController {
      * 根据用户ID查询用户
      * 前端传：{ "userId": 1 }
      */
+    @Operation(summary = "根据用户ID查询用户", description = "前端传：{ \"userId\": 1 }")
     @PostMapping("/getUserById")
     public Result<User> getUserById(@RequestBody Long userId) {
         if (userId == null) {
@@ -46,6 +52,7 @@ public class UserController {
      * 根据用户名（学号/工号）查询用户
      * 前端传：{ "userName": "2026001" }
      */
+    @Operation(summary = "根据用户名（学号/工号）查询用户", description = "前端传：{ \"userName\": \"2026001\" }")
     @PostMapping("/getUserByUsername")
     public Result<User> getUserByUsername(@RequestBody String userName) {
         if (userName == null || userName.trim().isEmpty()) {
@@ -59,6 +66,7 @@ public class UserController {
      * 根据角色ID查询用户列表
      * 前端传：{ "roleId": 1 }
      */
+    @Operation(summary = "根据角色ID查询用户列表", description = "前端传：{ \"roleId\": 1 }")
     @PostMapping("/getUsersByRoleId")
     public Result<List<User>> getUsersByRoleId(@RequestBody Integer roleId) {
         if (roleId == null) {
@@ -72,6 +80,7 @@ public class UserController {
      * 根据账号状态查询用户列表
      * 前端传：{ "status": 1 }
      */
+    @Operation(summary = "根据账号状态查询用户列表", description = "前端传：{ \"status\": 1 }")
     @PostMapping("/getUsersByStatus")
     public Result<List<User>> getUsersByStatus(@RequestBody Integer status) {
         if (status == null) {
@@ -85,6 +94,7 @@ public class UserController {
      * 分页查询用户
      * 前端传：{ "pageNum": 1, "pageSize": 10 }
      */
+    @Operation(summary = "分页查询用户", description = "前端传：{ \"pageNum\": 1, \"pageSize\": 10 }")
     @PostMapping("/getUserByPage")
     public Result<PageInfo<User>> getUserByPage(Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
@@ -98,6 +108,7 @@ public class UserController {
      * 多条件分页查询用户
      * 前端直接传 User 对象 + pageNum、pageSize
      */
+    @Operation(summary = "多条件分页查询用户", description = "前端直接传 User 对象 + pageNum、pageSize")
     @PostMapping("/getUserByConditionPage")
     public Result<PageInfo<User>> getUserByConditionPage(@RequestBody User user, Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
@@ -110,6 +121,7 @@ public class UserController {
     /**
      * 新增用户
      */
+    @Operation(summary = "新增用户")
     @PostMapping("/addUser")
     public Result<Boolean> addUser(@RequestBody User user) {
         Boolean success = userService.addUser(user);
@@ -122,6 +134,7 @@ public class UserController {
     /**
      * 修改用户信息
      */
+    @Operation(summary = "修改用户信息")
     @PostMapping("/updateUser")
     public Result<Boolean> updateUser(@RequestBody User user) {
         if (user.getUserId() == null) {
@@ -138,6 +151,7 @@ public class UserController {
      * 修改用户状态（启用/禁用）
      * 前端传：{ "userId": 1, "status": 0 }
      */
+    @Operation(summary = "修改用户状态（启用/禁用）", description = "前端传：{ \"userId\": 1, \"status\": 0 }")
     @PostMapping("/updateUserStatus")
     public Result<Boolean> updateUserStatus(@RequestBody User user) {
         Long userId = user.getUserId();

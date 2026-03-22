@@ -3,6 +3,8 @@ package com.qi.backend.controller;
 import com.qi.backend.entity.Role;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 @RequiredArgsConstructor
+@Tag(name = "角色管理")
 public class RoleController {
 
     private final RoleService roleService;
@@ -21,6 +24,7 @@ public class RoleController {
     /**
      * 获取所有角色
      */
+    @Operation(summary = "获取所有角色")
     @PostMapping("/getAllRoles")
     public Result<List<Role>> getAllRoles() {
         List<Role> roleList = roleService.getAllRoles();
@@ -32,6 +36,7 @@ public class RoleController {
      * 根据 ID 查询角色
      * 前端直接传 { "roleId": 1 } 即可，最简单！
      */
+    @Operation(summary = "根据ID查询角色", description = "前端直接传 { \"roleId\": 1 } 即可，最简单！")
     @PostMapping("/getRoleById")
     public Result<Role> getRoleById(@RequestBody Integer roleId) {
         if (roleId == null) {
@@ -45,6 +50,7 @@ public class RoleController {
     /**
      * 新增角色
      */
+    @Operation(summary = "新增角色")
     @PostMapping("/addRole")
     public Result<Boolean> addRole(@RequestBody Role role) {
         Boolean success = roleService.addRole(role);
@@ -57,6 +63,7 @@ public class RoleController {
     /**
      * 修改角色
      */
+    @Operation(summary = "修改角色")
     @PostMapping("/updateRole")
     public Result<Boolean> updateRole(@RequestBody Role role) {
         if (role.getRoleId() == null) {

@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.qi.backend.entity.College;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.CollegeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,24 +17,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/college")
 @RequiredArgsConstructor
+@Tag(name = "学院管理")
 public class CollegeController {
 
     private final CollegeService collegeService;
 
-    /**
-     * 获取所有学院
-     * 前端传：{}
-     */
+    @Operation(summary = "获取所有学院", description = "查询系统中全部的学院信息列表")
     @PostMapping("/getAllColleges")
     public Result<List<College>> getAllColleges() {
         List<College> collegeList = collegeService.getAllColleges();
         return Result.success("查询所有学院成功", collegeList);
     }
 
-    /**
-     * 根据ID查询学院
-     * 前端传：{ "collegeId": 1 }
-     */
+    @Operation(summary = "根据ID查询学院", description = "通过学院ID查询单个学院详情信息")
     @PostMapping("/getCollegeById")
     public Result<College> getCollegeById(@RequestBody Long collegeId) {
         if (collegeId == null) {
@@ -42,10 +39,7 @@ public class CollegeController {
         return Result.success("根据ID查询学院成功", college);
     }
 
-    /**
-     * 根据学院编码查询学院
-     * 前端传：{ "collegeCode": "25" }
-     */
+    @Operation(summary = "根据学院编码查询学院", description = "通过学院唯一编码查询学院信息")
     @PostMapping("/getCollegeByCode")
     public Result<College> getCollegeByCode(@RequestBody String collegeCode) {
         if (collegeCode == null || collegeCode.trim().isEmpty()) {
@@ -55,10 +49,7 @@ public class CollegeController {
         return Result.success("根据编码查询学院成功", college);
     }
 
-    /**
-     * 分页查询学院
-     * 前端传：{ "pageNum": 1, "pageSize": 10 }
-     */
+    @Operation(summary = "分页查询学院", description = "通过页码和每页条数分页获取学院列表")
     @PostMapping("/getCollegesByPage")
     public Result<PageInfo<College>> getCollegesByPage(Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
@@ -68,10 +59,7 @@ public class CollegeController {
         return Result.success("分页查询学院成功", pageInfo);
     }
 
-    /**
-     * 多条件分页查询学院
-     * 前端直接传 College 对象 + pageNum、pageSize
-     */
+    @Operation(summary = "多条件分页查询学院", description = "根据学院信息条件+分页参数组合查询学院")
     @PostMapping("/getCollegesByConditionPage")
     public Result<PageInfo<College>> getCollegesByConditionPage(@RequestBody College college, Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
@@ -81,9 +69,7 @@ public class CollegeController {
         return Result.success("多条件分页查询学院成功", pageInfo);
     }
 
-    /**
-     * 新增学院
-     */
+    @Operation(summary = "新增学院")
     @PostMapping("/addCollege")
     public Result<Boolean> addCollege(@RequestBody College college) {
         Boolean success = collegeService.addCollege(college);
@@ -93,9 +79,7 @@ public class CollegeController {
         return Result.error("新增学院失败");
     }
 
-    /**
-     * 修改学院信息
-     */
+    @Operation(summary = "修改学院信息")
     @PostMapping("/updateCollege")
     public Result<Boolean> updateCollege(@RequestBody College college) {
         if (college.getCollegeId() == null) {
