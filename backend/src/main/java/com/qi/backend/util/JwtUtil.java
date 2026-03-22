@@ -17,10 +17,10 @@ public class JwtUtil {
     private Long expire;    // token 有效期
 
     // 生成 token
-    public String createToken(Long userId, Boolean isAdmin) {
+    public String createToken(Long userId, Integer roleId) {
         return JWT.create()
                 .withClaim("userId", userId)
-                .withClaim("isAdmin", isAdmin)
+                .withClaim("roleId", roleId)
                 .withExpiresAt(new Date(System.currentTimeMillis() + expire))
                 .sign(Algorithm.HMAC256(secret));
     }
@@ -35,9 +35,9 @@ public class JwtUtil {
     }
 
     // 获取是否是管理员（可能不用）
-    public Boolean getIsAdmin(String token) {
+    public Integer getIsAdmin(String token) {
         try {
-            return JWT.decode(token).getClaim("isAdmin").asBoolean();
+            return JWT.decode(token).getClaim("roleId").asInt();
         } catch (Exception e) {
             return null;
         }

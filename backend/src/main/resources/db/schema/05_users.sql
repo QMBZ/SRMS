@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(30) NOT NULL UNIQUE COMMENT '登录账号（学生用学号，老师用工号）',
     password VARCHAR(64) NOT NULL COMMENT '登录密码（建议加密存储，如MD5/SHA256）',
     real_name VARCHAR(20) NOT NULL COMMENT '真实姓名',
-    role_id INT NOT NULL COMMENT '关联角色表ID',
+    role_id INT DEFAULT 3 COMMENT '关联角色表ID',
     status TINYINT DEFAULT 1 COMMENT '账号状态：1-正常，0-禁用',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
