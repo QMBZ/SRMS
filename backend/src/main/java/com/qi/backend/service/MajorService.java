@@ -63,14 +63,16 @@ public class MajorService {
     /**
      * 新增专业
      */
-    public void addMajor(Major major) {
-        majorMapper.insertMajor(major);
+    public Boolean addMajor(Major major) {
+        int count = majorMapper.insertMajor(major);
+        return count > 0;
     }
 
     /**
      * 修改专业
      */
-    public void updateMajor(Major major) {
-        majorMapper.updateMajor(major);
+    public Boolean updateMajor(Major major) {
+        int count = majorMapper.updateMajor(major);
+        return count > 0;
     }
 }

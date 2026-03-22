@@ -96,14 +96,16 @@ public class StudentInfoService {
     /**
      * 新增学生信息
      */
-    public void addStudentInfo(StudentInfo studentInfo) {
-        studentInfoMapper.insertStudentInfo(studentInfo);
+    public Boolean addStudentInfo(StudentInfo studentInfo) {
+        int count = studentInfoMapper.insertStudentInfo(studentInfo);
+        return count > 0;
     }
 
     /**
      * 修改学生信息
      */
-    public void updateStudentInfo(StudentInfo studentInfo) {
-        studentInfoMapper.updateStudentInfoById(studentInfo);
+    public Boolean updateStudentInfo(StudentInfo studentInfo) {
+        int count = studentInfoMapper.updateStudentInfoById(studentInfo);
+        return count > 0;
     }
 }

@@ -29,14 +29,16 @@ public class RoleService {
     /**
      * 新增角色
      */
-    public void addRole(Role role) {
-        roleMapper.insertRole(role);
+    public Boolean addRole(Role role) {
+        int count = roleMapper.insertRole(role);
+        return count > 0;
     }
 
     /**
      * 修改角色
      */
-    public void updateRole(Role role) {
-        roleMapper.updateRole(role);
+    public Boolean updateRole(Role role) {
+        int count = roleMapper.updateRole(role);
+        return count > 0;
     }
 }

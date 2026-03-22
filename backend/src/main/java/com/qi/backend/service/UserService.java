@@ -74,21 +74,24 @@ public class UserService {
     /**
      * 新增用户
      */
-    public void addUser(User user) {
-        userMapper.insertUser(user);
+    public Boolean addUser(User user) {
+        int count = userMapper.insertUser(user);
+        return count > 0;
     }
 
     /**
      * 修改用户信息
      */
-    public void updateUser(User user) {
-        userMapper.updateUser(user);
+    public Boolean updateUser(User user) {
+        int count = userMapper.updateUser(user);
+        return count > 0;
     }
 
     /**
      * 修改用户状态（启用/禁用）
      */
-    public void updateUserStatus(Long userId, Integer status) {
-        userMapper.updateUserStatus(userId, status);
+    public Boolean updateUserStatus(Long userId, Integer status) {
+        int count = userMapper.updateUserStatus(userId, status);
+        return count > 0;
     }
 }

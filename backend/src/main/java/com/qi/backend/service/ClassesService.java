@@ -70,14 +70,16 @@ public class ClassesService {
     /**
      * 新增班级
      */
-    public void addClass(Classes classes) {
-        classesMapper.insertClass(classes);
+    public Boolean addClass(Classes classes) {
+        int count = classesMapper.insertClass(classes);
+        return count > 0;
     }
 
     /**
      * 修改班级
      */
-    public void updateClass(Classes classes) {
-        classesMapper.updateClass(classes);
+    public Boolean updateClass(Classes classes) {
+        int count = classesMapper.updateClass(classes);
+        return count > 0;
     }
 }

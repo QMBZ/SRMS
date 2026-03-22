@@ -56,14 +56,16 @@ public class CollegeService {
     /**
      * 新增学院
      */
-    public void addCollege(College college) {
-        collegeMapper.insertCollege(college);
+    public Boolean addCollege(College college) {
+        int count = collegeMapper.insertCollege(college);
+        return count > 0;
     }
 
     /**
      * 修改学院
      */
-    public void updateCollege(College college) {
-        collegeMapper.updateCollege(college);
+    public Boolean updateCollege(College college) {
+        int count = collegeMapper.updateCollege(college);
+        return count > 0;
     }
 }
