@@ -41,6 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/auth/login",          // 登录
                         "/auth/register",       // 注册
                         "/swagger-ui/**",       // API 文档
+                        "/v3/**",
                         "/h2-console"           // h2 控制台
                 );
     }
