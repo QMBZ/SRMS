@@ -1,5 +1,5 @@
 <script setup>
-import MainView from '@/views/MainView.vue';
+import MainView from '@/views/MainView.vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 </script>
 
