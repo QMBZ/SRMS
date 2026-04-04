@@ -1,6 +1,7 @@
 package com.qi.backend.controller;
 
 import com.qi.backend.entity.User;
+import com.qi.backend.model.LoginRequest;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.AuthService;
 
@@ -23,7 +24,9 @@ public class AuthController {
         description = "根据用户名和密码进行登录验证，验证成功返回Token令牌"
     )
     @PostMapping("/login")
-    public Result<String> login(@RequestParam String username, @RequestParam String password) {
+    public Result<String> login(@RequestBody LoginRequest loginRequest) {
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
         String token = authService.login(username, password);
         return Result.success("登录成功", token);
     }
