@@ -5,6 +5,6 @@ import MainView from '@/views/MainView.vue'
 
 <template>
   <el-config-provider :locale="zhCn">
-    <MainView />
+    <RouterView />
   </el-config-provider>
 </template>

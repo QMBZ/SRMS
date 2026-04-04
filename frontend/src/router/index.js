@@ -3,8 +3,19 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user' // pinia
 
 import LoginView from '@/views/LoginView.vue'
+import MainView from "@/views/MainView.vue";
 
 const routes = [
+  {
+    path: '/',
+    component: MainView,
+    children: [
+      { path: '', component: null },
+    ],
+    meta: { requiresAuth: true },
+
+  },
+
   {
     path: '/login',
     component: LoginView,
@@ -21,6 +32,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   const hasToken = !!userStore.token
+  console.log('hasToken', hasToken)
 
   // 需要登录的页面
   if (to.meta.requiresAuth) {
