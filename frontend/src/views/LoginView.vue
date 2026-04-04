@@ -26,8 +26,8 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
-import { useApi } from '@/utils/request' // 你的封装axios
-import { useUserStore } from '@/stores/useUserStore' // pinia
+import { useApi } from '@/composables/useApi' // 你的封装axios
+import { useUserStore } from '@/stores/user' // pinia
 
 const router = useRouter()
 const { post } = useApi()

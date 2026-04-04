@@ -50,7 +50,7 @@ public class AuthService {
      */
     public boolean register(User user) {
         // 1. 校验用户名是否已存在
-        User existUser = userService.getUserByUsername(user.getUserName());
+        User existUser = userService.getUserByUsername(user.getUsername());
         if (existUser != null) {
             return false;
         }

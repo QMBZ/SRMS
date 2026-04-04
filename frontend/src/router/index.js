@@ -1,20 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
+import { useUserStore } from '@/stores/user' // pinia
+
 import LoginView from '@/views/LoginView.vue'
-import MainView from '@/views/MainView.vue'
 
 const routes = [
   {
     path: '/login',
     component: LoginView,
     meta: { requiresAuth: false }, // 不需要登录就能访问
-  },
-  {
-    path: '/',
-    component: MainView,
-    meta: { requiresAuth: true }, // 需要登录才能访问
-    children: [
-      // 你其他子页面写在这里
-    ],
   },
 ]
 

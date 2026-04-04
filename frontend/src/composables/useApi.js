@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '@/router/index.js'
-import { useUserStore } from '@/stores/useUserStore' // pinia
+import { useUserStore } from '@/stores/user' // pinia
 
 // 创建实例
 const instance = axios.create({
