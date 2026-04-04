@@ -16,8 +16,8 @@
           unique-opened
           class="sidebar-menu"
         >
-          <!-- ====================== 超级管理员 ====================== -->
-          <el-sub-menu index="1" v-if="role === 'super_admin'">
+          <!-- ====================== 超级管理员 roleId = 1 ====================== -->
+          <el-sub-menu index="1" v-if="userStore.roleId === 1">
             <template #title>
               <el-icon><Menu /></el-icon>
               <span>系统管理</span>
@@ -26,7 +26,7 @@
             <el-menu-item index="1-2">学院管理员管理</el-menu-item>
           </el-sub-menu>
 
-          <el-sub-menu index="2" v-if="role === 'super_admin'">
+          <el-sub-menu index="2" v-if="userStore.roleId === 1">
             <template #title>
               <el-icon><School /></el-icon>
               <span>基础数据</span>
@@ -36,18 +36,18 @@
             <el-menu-item index="2-3">班级管理</el-menu-item>
           </el-sub-menu>
 
-          <el-menu-item index="3" v-if="role === 'super_admin'">
+          <el-menu-item index="3" v-if="userStore.roleId === 1">
             <el-icon><User /></el-icon>
             <span>学生管理</span>
           </el-menu-item>
 
-          <!-- ====================== 学院管理员 ====================== -->
-          <el-menu-item index="4" v-if="role === 'college_admin'">
+          <!-- ====================== 学院管理员 roleId = 2 ====================== -->
+          <el-menu-item index="4" v-if="userStore.roleId === 2">
             <el-icon><User /></el-icon>
             <span>学生管理</span>
           </el-menu-item>
 
-          <el-sub-menu index="5" v-if="role === 'college_admin'">
+          <el-sub-menu index="5" v-if="userStore.roleId === 2">
             <template #title>
               <el-icon><School /></el-icon>
               <span>教学管理</span>
@@ -56,18 +56,18 @@
             <el-menu-item index="5-2">班级管理</el-menu-item>
           </el-sub-menu>
 
-          <el-menu-item index="6" v-if="role === 'college_admin'">
+          <el-menu-item index="6" v-if="userStore.roleId === 2">
             <el-icon><UserFilled /></el-icon>
             <span>用户管理</span>
           </el-menu-item>
 
-          <!-- ====================== 学生 ====================== -->
-          <el-menu-item index="7" v-if="role === 'student'">
+          <!-- ====================== 学生 roleId = 3 ====================== -->
+          <el-menu-item index="7" v-if="userStore.roleId === 3">
             <el-icon><User /></el-icon>
             <span>个人中心</span>
           </el-menu-item>
 
-          <el-menu-item index="8" v-if="role === 'student'">
+          <el-menu-item index="8" v-if="userStore.roleId === 3">
             <el-icon><Document /></el-icon>
             <span>我的学籍信息</span>
           </el-menu-item>
@@ -83,8 +83,8 @@
           </div>
           <div class="header-right">
             <el-avatar :size="40" src="https://picsum.photos/200" />
-            <span class="username">{{ username }}</span>
-            <el-button type="text" class="logout-btn">退出登录</el-button>
+            <span class="username">{{ userStore.realName || userStore.username }}</span>
+            <el-button type="primary" link class="logout-btn" @click="handleLogout">退出登录</el-button>
           </div>
         </el-header>
 
@@ -104,20 +104,25 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Menu, School, User, UserFilled, Document } from '@element-plus/icons-vue'
+// 引入 Pinia 用户仓库
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 
-// 当前激活菜单
+// 当前激活菜单（可根据路由自动设置，这里先保留默认）
 const activeMenu = ref('1')
 
-// ====================== 角色模拟（纯界面展示） ======================
-// 可选值：super_admin / college_admin / student
-const role = ref('super_admin')
-const username = ref('管理员')
-
-// 你可以随时切换角色测试界面：
-// const role = ref('college_admin')
-// const role = ref('student')
+/**
+ * 退出登录
+ * 1. 清空 userStore
+ * 2. 跳转到登录页
+ */
+const handleLogout = () => {
+  userStore.logout()
+  router.push('/login')
+  ElMessage.success('退出成功')
+}
 </script>
 
 <style scoped>

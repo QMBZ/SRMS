@@ -105,25 +105,29 @@ const handleLogin = async () => {
 .login-page {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f0f5ff 0%, #e6edf9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .login-container {
-  width: 420px;
-  padding: 40px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  padding: 32px 32px;
+  background: #ffffff;
+  border-radius: 8px;
+  /* 柔和阴影 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e4e7ed;
 }
 
 .login-title {
   text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+  margin-bottom: 35px;
+  color: #1f2937;
   font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 1px;
 }
 
 .login-form {
@@ -134,5 +138,16 @@ const handleLogin = async () => {
   width: 100%;
   height: 44px;
   font-size: 16px;
+  margin-top: 10px;
+}
+
+/* 输入框统一样式优化 */
+:deep(.el-input) {
+  --el-input-height: 44px;
+}
+
+/* 表单间距优化 */
+.el-form-item {
+  margin-bottom: 22px;
 }
 </style>

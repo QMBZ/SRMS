@@ -5,13 +5,13 @@ export const useUserStore = defineStore('user', {
   // 状态
   state: () => ({
     token: '', // JWT token
-    userId: '', // 用户ID user_id
-    roleId: '', // 角色ID role_id
+    userId: 0, // 用户ID user_id
+    roleId: 1, // 角色ID role_id
 
     // 用户表其他信息
     username: '', // 登录账号
     realName: '', // 真实姓名
-    status: '', // 账号状态 1正常 0禁用
+    status: 1, // 账号状态 1正常 0禁用
   }),
 
   // 方法：修改状态
@@ -33,11 +33,11 @@ export const useUserStore = defineStore('user', {
       this.$reset()
     },
 
-    // 3. 单独更新用户信息（比如修改资料后）
-    updateUserInfo(data) {
-      this.realName = data.realName || this.realName
-      this.username = data.username || this.username
-    },
+    // // 3. 单独更新用户信息（比如修改资料后）
+    // updateUserInfo(data) {
+    //   this.realName = data.realName || this.realName
+    //   this.username = data.username || this.username
+    // },
   },
 
   // 持久化：刷新页面不丢失
