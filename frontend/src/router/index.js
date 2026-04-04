@@ -3,17 +3,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user' // pinia
 
 import LoginView from '@/views/LoginView.vue'
-import MainView from "@/views/MainView.vue";
+import MainView from '@/views/MainView.vue'
 
 const routes = [
   {
     path: '/',
     component: MainView,
-    children: [
-      { path: '', component: null },
-    ],
+    children: [{ path: '', component: null }],
     meta: { requiresAuth: true },
-
   },
 
   {
@@ -31,6 +28,7 @@ const router = createRouter({
 // =============== 路由守卫：判断是否登录 ===============
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
+  console.log(userStore)
   const hasToken = !!userStore.token
   console.log('hasToken', hasToken)
 

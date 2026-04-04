@@ -4,7 +4,7 @@
       <h2 class="login-title">学生学籍管理系统</h2>
 
       <!-- 登录表单 -->
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" @keyup.enter.native="handleLogin">
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入账号" prefix-icon="User" clearable />
         </el-form-item>
@@ -26,8 +26,9 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
-import { useApi } from '@/composables/useApi' // 你的封装axios
+import { useApi } from '@/composables/useApi'
 import { useUserStore } from '@/stores/user' // pinia
+import { getUserId, getRoleId } from '@/utils/jwt'
 
 const router = useRouter()
 const { post } = useApi()
@@ -68,10 +69,24 @@ const handleLogin = async () => {
       ElMessage.success('登录成功')
 
       // 保存 token 到 pinia
+      const token = res.data
+      const userId = getUserId(token)
+
       userStore.setLoginInfo({
-        token: res.data,
-        username: loginForm.username,
+        token: token
       })
+
+      // 获取用户信息（这个接口要token）
+      const userRes = await post('/user/getUserById', userId)
+      const userData = userRes.data
+      userStore.setLoginInfo({
+        token: token,
+        ...userData
+      })
+
+      console.log('token', token)
+      console.log('user', userData)
+      console.log('username', userData.username)
 
       // 跳转到主页
       router.replace('/')
