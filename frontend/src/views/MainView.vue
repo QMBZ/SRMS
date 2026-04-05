@@ -16,6 +16,12 @@
           unique-opened
           class="sidebar-menu"
         >
+          <!-- ====================== 所有角色通用：个人中心 ====================== -->
+          <el-menu-item index="0" @click="toProfile">
+            <el-icon><User /></el-icon>
+            <span>个人中心</span>
+          </el-menu-item>
+
           <!-- ====================== 超级管理员 roleId = 1 ====================== -->
           <el-sub-menu index="1" v-if="userStore.roleId === 1">
             <template #title>
@@ -33,7 +39,7 @@
             </template>
             <el-menu-item index="2-1">学院管理</el-menu-item>
             <el-menu-item index="2-2">专业管理</el-menu-item>
-            <el-menu-item index="2-3">班级管理</el-menu-item>
+            <el-menu-item index="2-3" @click="toClassManager">班级管理</el-menu-item>
           </el-sub-menu>
 
           <el-menu-item index="3" v-if="userStore.roleId === 1">
@@ -62,11 +68,6 @@
           </el-menu-item>
 
           <!-- ====================== 学生 roleId = 3 ====================== -->
-          <el-menu-item index="7" v-if="userStore.roleId === 3" @click="toProfile">
-            <el-icon><User /></el-icon>
-            <span>个人中心</span>
-          </el-menu-item>
-
           <el-menu-item index="8" v-if="userStore.roleId === 3" @click="toRecord">
             <el-icon><Document /></el-icon>
             <span>我的学籍信息</span>
@@ -128,6 +129,12 @@ const handleLogout = () => {
 const toAdminCollege = () => {
   activeMenu.value = '1-2'
   router.push('/admin-college')
+}
+
+// 跳转到班级管理界面
+const toClassManager = () => {
+  activeMenu.value = '2-3'
+  router.push('/class-manager')
 }
 
 // 跳转到个人信息

@@ -64,9 +64,11 @@ import { ElMessage } from 'element-plus'
 import { View, Hide } from '@element-plus/icons-vue'
 import { useApi } from '@/composables/useApi'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
 import { formatDate } from '@/utils/date'
 
 const userStore = useUserStore()
+const router = useRouter()
 const loading = ref(false)
 const { post } = useApi()
 
@@ -160,7 +162,15 @@ const getStatusClass = (status) => {
   return map[status] || 'status-normal'
 }
 
-onMounted(() => getMyInfo())
+onMounted(() => {
+  if (userStore.roleId !== 3) {
+    ElMessage.warning('没有此界面的访问权限')
+    router.push('/')
+    return
+  }
+
+  getMyInfo()
+})
 </script>
 
 <style scoped>

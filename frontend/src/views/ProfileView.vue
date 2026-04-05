@@ -10,7 +10,7 @@
         <div class="info-content">
           <!-- 头像 -->
           <div class="avatar-box">
-            <el-avatar :size="120" :src="photoUrl"/>
+            <el-avatar :size="120" :src="photoUrl" />
             <p class="status-badge" :class="getRoleClass(userInfo.roleId)">
               {{ mapRoleIdToName(userInfo.roleId) }}
             </p>
@@ -38,37 +38,32 @@
 
               <el-tab-pane label="安全设置" name="security">
                 <div class="security-form">
-                  <el-form
-                      :model="pwdForm"
-                      :rules="rules"
-                      ref="pwdFormRef"
-                      label-position="top"
-                  >
+                  <el-form :model="pwdForm" :rules="rules" ref="pwdFormRef" label-position="top">
                     <el-form-item label="当前密码" prop="oldPassword">
                       <el-input
-                          v-model="pwdForm.oldPassword"
-                          type="password"
-                          show-password
-                          placeholder="请输入当前登录密码"
+                        v-model="pwdForm.oldPassword"
+                        type="password"
+                        show-password
+                        placeholder="请输入当前登录密码"
                       />
                     </el-form-item>
                     <el-form-item label="新密码" prop="newPassword">
                       <el-input
-                          v-model="pwdForm.newPassword"
-                          type="password"
-                          show-password
-                          placeholder="请输入新密码（6-20位）"
+                        v-model="pwdForm.newPassword"
+                        type="password"
+                        show-password
+                        placeholder="请输入新密码（6-20位）"
                       />
                     </el-form-item>
                     <el-form-item label="确认新密码" prop="confirmPassword">
                       <el-input
-                          v-model="pwdForm.confirmPassword"
-                          type="password"
-                          show-password
-                          placeholder="请再次输入新密码"
+                        v-model="pwdForm.confirmPassword"
+                        type="password"
+                        show-password
+                        placeholder="请再次输入新密码"
                       />
                     </el-form-item>
-                    <el-form-item style="margin-top: 30px;">
+                    <el-form-item style="margin-top: 30px">
                       <el-button type="primary" @click="handleUpdatePassword" :loading="submitting">
                         保存修改
                       </el-button>
@@ -86,18 +81,18 @@
 </template>
 
 <script setup>
-import {ref, reactive, onMounted} from 'vue'
-import {ElMessage} from 'element-plus'
-import {useApi} from '@/composables/useApi'
-import {useUserStore} from '@/stores/user'
+import { ref, reactive, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
+import { useApi } from '@/composables/useApi'
+import { useUserStore } from '@/stores/user'
 // 获取roleId
-import {getRoleId} from "@/utils/jwt.js";
+import { getRoleId } from '@/utils/jwt.js'
 
 // ======================
 // 1. 初始化数据与 Store
 // ======================
 const userStore = useUserStore()
-const {post} = useApi()
+const { post } = useApi()
 const loading = ref(false)
 const submitting = ref(false)
 const activeTab = ref('basic')
@@ -120,7 +115,7 @@ const pwdFormRef = ref(null)
 const pwdForm = reactive({
   oldPassword: '',
   newPassword: '',
-  confirmPassword: ''
+  confirmPassword: '',
 })
 
 // ======================
@@ -135,15 +130,15 @@ const validateConfirm = (rule, value, callback) => {
 }
 
 const rules = {
-  oldPassword: [{required: true, message: '请输入当前密码', trigger: 'blur'}],
+  oldPassword: [{ required: true, message: '请输入当前密码', trigger: 'blur' }],
   newPassword: [
-    {required: true, message: '请输入新密码', trigger: 'blur'},
-    {min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur'}
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
   ],
   confirmPassword: [
-    {required: true, message: '请确认新密码', trigger: 'blur'},
-    {validator: validateConfirm, trigger: 'blur'}
-  ]
+    { required: true, message: '请确认新密码', trigger: 'blur' },
+    { validator: validateConfirm, trigger: 'blur' },
+  ],
 }
 
 // ======================
@@ -154,7 +149,7 @@ const mapRoleIdToName = (roleId) => {
   const roleMap = {
     1: '超级管理员',
     2: '学院管理员',
-    3: '学生'
+    3: '学生',
   }
   // 匹配不到则返回'暂无'
   return roleMap[roleId] || '暂无'
@@ -165,9 +160,9 @@ const mapRoleIdToName = (roleId) => {
 // ======================
 const getRoleClass = (roleId) => {
   const roleClassMap = {
-    1: 'status-super',    // 超级管理员-紫色
-    2: 'status-college',  // 学院管理员-橙色
-    3: 'status-student'   // 学生-蓝色
+    1: 'status-super', // 超级管理员-紫色
+    2: 'status-college', // 学院管理员-橙色
+    3: 'status-student', // 学生-蓝色
   }
   return roleClassMap[roleId] || 'status-student' // 默认学生样式
 }
@@ -195,9 +190,9 @@ const getUserProfile = async () => {
   // 剩下字段通过查询获取
 
   /*
-  * 如果该用户为学生，获取照片，否则使用默认照片
-  * 学院，学生通过studentInfo查，系管理为对应学院，校管理直接为学校
-  *  */
+   * 如果该用户为学生，获取照片，否则使用默认照片
+   * 学院，学生通过studentInfo查，系管理为对应学院，校管理直接为学校
+   *  */
 
   try {
     // 当用户不为学生时，只设置学院名称
@@ -256,7 +251,7 @@ const handleUpdatePassword = () => {
       try {
         const res = await post('/user/updatePassword', {
           username: userStore.username,
-          ...pwdForm
+          ...pwdForm,
         })
         if (res.code === 200) {
           ElMessage.success('密码修改成功')

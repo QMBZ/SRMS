@@ -37,13 +37,12 @@
     <!-- 数据表格 -->
     <div v-loading="loading" element-loading-text="加载中..." class="table-box">
       <el-table :data="adminList" border stripe size="default" header-align="center" align="center">
-        <el-table-column label="序号" type="index" width="60" />
         <el-table-column label="绑定ID" prop="id" width="100" />
         <el-table-column label="管理员ID" prop="userId" width="120" />
         <el-table-column label="管理员姓名" prop="realName" min-width="120" />
         <el-table-column label="工号" prop="username" min-width="140" />
         <el-table-column label="管理学院" prop="collegeName" min-width="160" />
-        <el-table-column label="创建时间" prop="createTime" width="180" :formatter="formatDateTime" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" :formatter="formatDateTime" />
         <el-table-column label="操作" width="120" fixed="right">
           <template #default="scope">
             <el-button type="danger" link @click="handleUnbind(scope.row)"> 解绑 </el-button>

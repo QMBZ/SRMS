@@ -53,10 +53,10 @@ instance.interceptors.response.use(
   },
 )
 
-// 导出：只暴露 post（你说接口全是POST）
+// 导出：只暴露 post
 export function useApi() {
   return {
-    post: (url, data = {}) => instance.post(url, data),
+    post: (url, data = {}, config = {}) => instance.post(url, data, config),
   }
 }
 
