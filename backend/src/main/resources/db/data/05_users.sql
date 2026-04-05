@@ -1,13 +1,13 @@
 -- 超级管理员
 INSERT INTO users (username, password, real_name, role_id, status)
-VALUES ('admin', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '系统管理员', 1, 1);
+VALUES ('10000', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '系统管理员', 1, 1);
 
 -- 学院管理员
 INSERT INTO users (username, password, real_name, role_id, status)
 VALUES
-('admin01', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '计算机学院管理员', 2, 1),
-('admin02', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '电子信息学院管理员', 2, 1),
-('admin03', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '机械工程学院管理员', 2, 1);
+('10001', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '计算机学院管理员', 2, 1),
+('10002', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '电子信息学院管理员', 2, 1),
+('10003', '$2a$10$h33yf382ocZ4oX5VEamTVeUa/7KF3z3hX61Xv/qonIcQsGVIIOhJK', '机械工程学院管理员', 2, 1);
 
 -- 2021级 计算机学院 010101 30人
 INSERT INTO users (username, password, real_name, role_id)

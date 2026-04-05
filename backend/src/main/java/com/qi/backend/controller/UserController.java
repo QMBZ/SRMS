@@ -50,15 +50,15 @@ public class UserController {
 
     /**
      * 根据用户名（学号/工号）查询用户
-     * 前端传：{ "userName": "2026001" }
+     * 前端传：{ "username": "2026001" }
      */
-    @Operation(summary = "根据用户名（学号/工号）查询用户", description = "前端传：{ \"userName\": \"2026001\" }")
+    @Operation(summary = "根据用户名（学号/工号）查询用户", description = "前端传：{ \"username\": \"2026001\" }")
     @PostMapping("/getUserByUsername")
-    public Result<User> getUserByUsername(@RequestBody String userName) {
-        if (userName == null || userName.trim().isEmpty()) {
+    public Result<User> getUserByUsername(@RequestBody String username) {
+        if (username == null || username.trim().isEmpty()) {
             return Result.error("用户名不能为空");
         }
-        User user = userService.getUserByUsername(userName);
+        User user = userService.getUserByUsername(username);
         return Result.success("根据用户名查询用户成功", user);
     }
 

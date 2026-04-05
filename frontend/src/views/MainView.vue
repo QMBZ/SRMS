@@ -23,7 +23,7 @@
               <span>系统管理</span>
             </template>
             <el-menu-item index="1-1">用户管理</el-menu-item>
-            <el-menu-item index="1-2">学院管理员管理</el-menu-item>
+            <el-menu-item index="1-2" @click="toAdminCollege">学院管理员管理</el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="2" v-if="userStore.roleId === 1">
@@ -82,7 +82,8 @@
             <span class="page-title">学生学籍管理系统</span>
           </div>
           <div class="header-right">
-            <el-avatar :size="40" src="https://picsum.photos/200" />
+            <!-- <el-avatar :size="40" src="https://picsum.photos/200" /> -->
+            <el-avatar :size="40" src="https://api.dicebear.com/9.x/shapes/svg" />
             <span class="username">{{ userStore.realName || userStore.username }}</span>
             <el-button type="primary" link class="logout-btn" @click="handleLogout">退出登录</el-button>
           </div>
@@ -121,6 +122,12 @@ const handleLogout = () => {
   userStore.logout()
   router.push('/login')
   ElMessage.success('退出成功')
+}
+
+// 跳转到学院管理员管理界面
+const toAdminCollege = () => {
+  activeMenu.value = '1-2'
+  router.push('/admin-college')
 }
 
 // 跳转到学籍信息
