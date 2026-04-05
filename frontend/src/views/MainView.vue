@@ -67,7 +67,7 @@
             <span>个人中心</span>
           </el-menu-item>
 
-          <el-menu-item index="8" v-if="userStore.roleId === 3">
+          <el-menu-item index="8" v-if="userStore.roleId === 3" @click="toRecord">
             <el-icon><Document /></el-icon>
             <span>我的学籍信息</span>
           </el-menu-item>
@@ -104,7 +104,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Menu, School, User, UserFilled, Document } from '@element-plus/icons-vue'
-// 引入 Pinia 用户仓库
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
@@ -122,6 +121,12 @@ const handleLogout = () => {
   userStore.logout()
   router.push('/login')
   ElMessage.success('退出成功')
+}
+
+// 跳转到学籍信息
+const toRecord = () => {
+  activeMenu.value = '8'
+  router.push('/record')
 }
 </script>
 
@@ -200,7 +205,7 @@ const handleLogout = () => {
   background-color: #fff;
   border-radius: 4px;
   padding: 20px;
-  min-height: calc(100% - 40px);
+  /* min-height: calc(100% - 40px); */
 }
 </style>
 

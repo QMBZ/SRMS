@@ -4,7 +4,13 @@
       <h2 class="login-title">学生学籍管理系统</h2>
 
       <!-- 登录表单 -->
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" @keyup.enter.native="handleLogin">
+      <el-form
+        ref="loginFormRef"
+        :model="loginForm"
+        :rules="loginRules"
+        class="login-form"
+        @keyup.enter.native="handleLogin"
+      >
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入账号" prefix-icon="User" clearable />
         </el-form-item>
@@ -73,7 +79,7 @@ const handleLogin = async () => {
       const userId = getUserId(token)
 
       userStore.setLoginInfo({
-        token: token
+        token: token,
       })
 
       // 获取用户信息（这个接口要token）
@@ -81,7 +87,7 @@ const handleLogin = async () => {
       const userData = userRes.data
       userStore.setLoginInfo({
         token: token,
-        ...userData
+        ...userData,
       })
 
       console.log('token', token)

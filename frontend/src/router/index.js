@@ -4,12 +4,13 @@ import { useUserStore } from '@/stores/user' // pinia
 
 import LoginView from '@/views/LoginView.vue'
 import MainView from '@/views/MainView.vue'
+import RecordView from '@/views/RecordView.vue'
 
 const routes = [
   {
     path: '/',
     component: MainView,
-    children: [{ path: '', component: null }],
+    children: [{ path: 'record', component: RecordView }],
     meta: { requiresAuth: true },
   },
 
