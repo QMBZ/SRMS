@@ -62,7 +62,7 @@
           </el-menu-item>
 
           <!-- ====================== 学生 roleId = 3 ====================== -->
-          <el-menu-item index="7" v-if="userStore.roleId === 3">
+          <el-menu-item index="7" v-if="userStore.roleId === 3" @click="toProfile">
             <el-icon><User /></el-icon>
             <span>个人中心</span>
           </el-menu-item>
@@ -128,6 +128,12 @@ const handleLogout = () => {
 const toAdminCollege = () => {
   activeMenu.value = '1-2'
   router.push('/admin-college')
+}
+
+// 跳转到个人信息
+const toProfile = () => {
+  activeMenu.value = '7'
+  router.push('/profile')
 }
 
 // 跳转到学籍信息
