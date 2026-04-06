@@ -36,6 +36,7 @@ public class AdminCollegeController {
     }
 
     @PostMapping("/getByUserId")
+    @Operation(summary = "根据管理员ID查询所管理的学院", description = "传入管理员ID，返回学院ID")
     public Result<AdminCollege> getByUserId(@RequestBody Long userId) {
         if (userId == null) {
             return Result.error("学院ID不能为空");
