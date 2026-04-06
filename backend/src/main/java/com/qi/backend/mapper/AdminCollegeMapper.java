@@ -8,6 +8,9 @@ public interface AdminCollegeMapper {
     // 根据学院ID查询所有管理员
     List<AdminCollege> selectByCollegeId(Long collegeId);
 
+    // 根据用户 ID 获取记录
+    AdminCollege selectByUserId(Long userId);
+
     // 查询全部记录
     List<AdminCollege> selectAll();
 

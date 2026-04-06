@@ -17,6 +17,11 @@
         select * from admin_college where college_id = #{collegeId}
     </select>
 
+    <!-- 根据用户ID查询唯一绑定关系 -->
+    <select id="selectByUserId" resultMap="AdminCollegeResultMap">
+        select * from admin_college where user_id = #{userId}
+    </select>
+
     <!-- 查询全部 -->
     <select id="selectAll" resultMap="AdminCollegeResultMap">
         select * from admin_college order by create_time desc

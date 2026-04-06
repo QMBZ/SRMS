@@ -21,6 +21,13 @@ public class AdminCollegeService {
     }
 
     /**
+     * 根据用户ID获取绑定的学院
+     */
+    public AdminCollege getByUserId(Long userId) {
+        return adminCollegeMapper.selectByUserId(userId);
+    }
+
+    /**
      * 查询全部
      */
     public List<AdminCollege> getAll() {

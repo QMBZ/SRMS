@@ -35,6 +35,15 @@ public class AdminCollegeController {
         return Result.success("查询成功", list);
     }
 
+    @PostMapping("/getByUserId")
+    public Result<AdminCollege> getByUserId(@RequestBody Long userId) {
+        if (userId == null) {
+            return Result.error("学院ID不能为空");
+        }
+        AdminCollege adminCollege = adminCollegeService.getByUserId(userId);
+        return Result.success("查询成功", adminCollege);
+    }
+
     /**
      * 查询全部学院管理员
      */
