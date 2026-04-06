@@ -3,6 +3,7 @@ package com.qi.backend.mapper;
 import java.util.List;
 
 import com.qi.backend.entity.User;
+import com.qi.backend.model.ChangePasswordRequest;
 
 public interface UserMapper {
     // 获取所有用户
@@ -34,4 +35,10 @@ public interface UserMapper {
 
     // 修改用户状态（禁用/启用）
     int updateUserStatus(Long userId, Integer status);
+
+    // 修改用户密码
+    int updatePassword(ChangePasswordRequest changePasswordRequest);
+
+    // 重置用户密码
+    int resetPassword(Long userId, String password);
 }

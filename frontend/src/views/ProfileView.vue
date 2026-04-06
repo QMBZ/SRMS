@@ -87,10 +87,12 @@ import { useApi } from '@/composables/useApi'
 import { useUserStore } from '@/stores/user'
 // 获取roleId
 import { getRoleId } from '@/utils/jwt.js'
+import {useRouter} from "vue-router";
 
 // ======================
 // 1. 初始化数据与 Store
 // ======================
+const router = useRouter()
 const userStore = useUserStore()
 const { post } = useApi()
 const loading = ref(false)
@@ -250,12 +252,14 @@ const handleUpdatePassword = () => {
       submitting.value = true
       try {
         const res = await post('/user/updatePassword', {
-          username: userStore.username,
-          ...pwdForm,
+          userId: userStore.userId, // 需确认userStore中是否有userId，若无则补充获取逻辑
+          oldPassword: pwdForm.oldPassword,
+          newPassword: pwdForm.newPassword,
         })
         if (res.code === 200) {
           ElMessage.success('密码修改成功')
           resetPwdForm()
+          handleLogout()
         } else {
           ElMessage.error(res.msg || '修改失败')
         }
@@ -266,6 +270,16 @@ const handleUpdatePassword = () => {
       }
     }
   })
+}
+
+// 退出登录
+const handleLogout = () => {
+  userStore.logout()
+  // 加个 setTimeout 0 毫秒，让路由跳转在下一轮执行
+  setTimeout(() => {
+    router.push('/login')
+    ElMessage.success('密码修改成功，请重新登录')
+  }, 0)
 }
 
 const resetPwdForm = () => {

@@ -2,6 +2,7 @@ package com.qi.backend.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.qi.backend.entity.User;
+import com.qi.backend.model.ChangePasswordRequest;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.UserService;
 
@@ -164,5 +165,37 @@ public class UserController {
             return Result.success("修改用户状态成功", success);
         }
         return Result.error("修改用户状态失败");
+    }
+
+    /*
+    * 修改密码
+    *  */
+    @Operation(summary = "修改用户密码")
+    @PostMapping("/updatePassword")
+    public Result<Boolean> updatePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        if (changePasswordRequest.getUserId() == null) {
+            return Result.error("用户ID不能为空");
+        }
+        Boolean success = userService.updatePassword(changePasswordRequest);
+        if (success) {
+            return Result.success("修改密码成功", success);
+        }
+        return Result.error("修改密码失败");
+    }
+
+    /*
+    * 重置密码
+    *  */
+    @Operation(summary = "重置用户密码")
+    @PostMapping("/resetPassword")
+    public Result<Boolean> resetPassword(@RequestBody Long userId) {
+        if (userId == null) {
+            return Result.error("用户ID不能为空");
+        }
+        Boolean success = userService.resetPassword(userId);
+        if (success) {
+            return Result.success("重置用户密码成功", success);
+        }
+        return Result.error("重置用户密码失败");
     }
 }

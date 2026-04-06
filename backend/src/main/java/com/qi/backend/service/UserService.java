@@ -2,6 +2,8 @@ package com.qi.backend.service;
 
 import java.util.List;
 
+import com.qi.backend.model.ChangePasswordRequest;
+import com.qi.backend.util.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userMapper.selectAllUsers();
@@ -92,6 +95,37 @@ public class UserService {
      */
     public Boolean updateUserStatus(Long userId, Integer status) {
         int count = userMapper.updateUserStatus(userId, status);
+        return count > 0;
+    }
+
+    /*
+    * 修改用户密码
+    *  */
+    public Boolean updatePassword(ChangePasswordRequest changePasswordRequest) {
+        /*
+        * 获取当前userId的登录密码，并与旧密码比对是否相同
+        * 将加密后的新密码进行替换
+        * 调用Mapper进行修改
+        *  */
+
+        User user = getUserById(changePasswordRequest.getUserId());
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+            return false;
+        }
+
+        String newPassword = passwordEncoder.encode(changePasswordRequest.getNewPassword());
+        changePasswordRequest.setNewPassword(newPassword);
+
+        int count = userMapper.updatePassword(changePasswordRequest);
+        return count > 0;
+    }
+
+    /*
+    * 重置用户密码
+    *  */
+    public Boolean resetPassword(Long userId) {
+        String password = passwordEncoder.encode("123456");
+        int count = userMapper.resetPassword(userId, password);
         return count > 0;
     }
 }

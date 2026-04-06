@@ -82,8 +82,20 @@
         where user_id = #{userId}
     </update>
 
-    <!-- 修改用户 -->
+    <!-- 修改用户状态（禁用/启用） -->
     <update id="updateUserStatus">
         update users set status = #{status} where user_id = #{userId}
     </update>
+
+    <!-- 修改用户密码 -->
+    <update id="updatePassword">
+        update users set password = #{newPassword} where user_id = #{userId}
+    </update>
+
+    <!-- 重置用户密码 -->
+    <update id="resetPassword">
+        update users set password = #{password} where user_id = #{userId}
+    </update>
+
+
 </mapper>
