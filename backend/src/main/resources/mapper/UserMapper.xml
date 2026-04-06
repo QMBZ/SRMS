@@ -48,26 +48,26 @@
     <select id="selectUsersByConditionPage" resultMap="UserResultMap">
         select * from users
         <where>
-            <if test="user.realName != null and user.realName != ''">
-                and real_name like concat('%', #{user.realName}, '%')
+            <if test="realName != null and realName != ''">
+                and real_name like concat('%', #{realName}, '%')
             </if>
-            <if test="user.username != null and user.username != ''">
-                and username like concat('%', #{user.username}, '%')
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
             </if>
-            <if test="user.roleId != null">
-                and role_id = #{user.roleId}
+            <if test="roleId != null">
+                and role_id = #{roleId}
             </if>
-            <if test="user.status != null">
-                and status = #{user.status}
+            <if test="status != null">
+                and status = #{status}
             </if>
         </where>
-        order by create_time desc
+        order by create_time, user_id desc
     </select>
 
     <!-- 新增用户 -->
     <insert id="insertUser">
-        insert into users(username, password, real_name, role_id, status)
-        values(#{username}, #{password}, #{realName}, #{roleId}, #{status})
+        insert into users(username, real_name, role_id, status)
+        values(#{username}, #{realName}, #{roleId}, #{status})
     </insert>
 
     <!-- 修改用户 -->

@@ -28,7 +28,7 @@
               <el-icon><Menu /></el-icon>
               <span>系统管理</span>
             </template>
-            <el-menu-item index="1-1">用户管理</el-menu-item>
+            <el-menu-item index="1-1" @click="toUserManager">用户管理</el-menu-item>
             <el-menu-item index="1-2" @click="toAdminCollege">学院管理员管理</el-menu-item>
           </el-sub-menu>
 
@@ -147,6 +147,12 @@ const toMajorManager = () => {
 const toCollegeManager = () => {
   activeMenu.value = '2-1'
   router.push('/college-manager')
+}
+
+// 跳转到用户管理界面
+const toUserManager = () => {
+  activeMenu.value = '1-1'
+  router.push('/user-manager')
 }
 
 // 跳转到个人信息

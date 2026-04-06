@@ -61,7 +61,7 @@
                 and college_id = #{collegeId}
             </if>
         </where>
-        order by create_time desc
+        order by create_time, class_id desc
     </select>
 
     <!-- 新增班级 -->

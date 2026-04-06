@@ -101,7 +101,7 @@
                 and student_status = #{studentStatus}
             </if>
         </where>
-        order by create_time desc
+        order by create_time, student_id desc
     </select>
 
     <!-- 新增学生信息 -->

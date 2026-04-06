@@ -11,6 +11,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import ClassesManagerView from '@/views/ClassesManagerView.vue'
 import MajorManagerView from '@/views/MajorManagerView.vue'
 import CollegeManagerView from '@/views/CollegeManagerView.vue'
+import UserManagerView from '@/views/UserManagerView.vue'
 
 const routes = [
   {
@@ -23,6 +24,7 @@ const routes = [
       { path: 'class-manager', component: ClassesManagerView },
       { path: 'major-manager', component: MajorManagerView },
       { path: 'college-manager', component: CollegeManagerView },
+      { path: 'user-manager', component: UserManagerView },
       { path: 'profile', component: ProfileView },
     ],
     meta: { requiresAuth: true },
