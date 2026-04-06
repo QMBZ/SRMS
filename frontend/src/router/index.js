@@ -9,6 +9,8 @@ import AdminCollege from '@/views/AdminCollege.vue'
 import HomeView from '@/views/HomeView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ClassesManagerView from '@/views/ClassesManagerView.vue'
+import MajorManagerView from '@/views/MajorManagerView.vue'
+import CollegeManagerView from '@/views/CollegeManagerView.vue'
 
 const routes = [
   {
@@ -19,6 +21,8 @@ const routes = [
       { path: 'record', component: RecordView },
       { path: 'admin-college', component: AdminCollege },
       { path: 'class-manager', component: ClassesManagerView },
+      { path: 'major-manager', component: MajorManagerView },
+      { path: 'college-manager', component: CollegeManagerView },
       { path: 'profile', component: ProfileView },
     ],
     meta: { requiresAuth: true },

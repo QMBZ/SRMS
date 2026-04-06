@@ -37,8 +37,8 @@
               <el-icon><School /></el-icon>
               <span>基础数据</span>
             </template>
-            <el-menu-item index="2-1">学院管理</el-menu-item>
-            <el-menu-item index="2-2">专业管理</el-menu-item>
+            <el-menu-item index="2-1" @click="toCollegeManager">学院管理</el-menu-item>
+            <el-menu-item index="2-2" @click="toMajorManager">专业管理</el-menu-item>
             <el-menu-item index="2-3" @click="toClassManager">班级管理</el-menu-item>
           </el-sub-menu>
 
@@ -135,6 +135,18 @@ const toAdminCollege = () => {
 const toClassManager = () => {
   activeMenu.value = '2-3'
   router.push('/class-manager')
+}
+
+// 跳转到专业管理界面
+const toMajorManager = () => {
+  activeMenu.value = '2-2'
+  router.push('/major-manager')
+}
+
+// 跳转到学院管理界面
+const toCollegeManager = () => {
+  activeMenu.value = '2-1'
+  router.push('/college-manager')
 }
 
 // 跳转到个人信息
