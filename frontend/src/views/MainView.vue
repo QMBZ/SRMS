@@ -42,13 +42,18 @@
             <el-menu-item index="2-3" @click="toClassManager">班级管理</el-menu-item>
           </el-sub-menu>
 
-          <el-menu-item index="3" v-if="userStore.roleId === 1">
+          <!-- <el-menu-item index="3" v-if="userStore.roleId !== 3" @click="toStudentManager">
+            <el-icon><User /></el-icon>
+            <span>学生管理</span>
+          </el-menu-item> -->
+
+          <!-- ====================== 学院管理员 roleId = 2 ====================== -->
+          <el-menu-item index="3" v-if="userStore.roleId !== 3" @click="toStudentManager">
             <el-icon><User /></el-icon>
             <span>学生管理</span>
           </el-menu-item>
 
-          <!-- ====================== 学院管理员 roleId = 2 ====================== -->
-          <el-menu-item index="4" v-if="userStore.roleId === 2">
+          <!-- <el-menu-item index="4" v-if="userStore.roleId === 2">
             <el-icon><User /></el-icon>
             <span>学生管理</span>
           </el-menu-item>
@@ -65,7 +70,7 @@
           <el-menu-item index="6" v-if="userStore.roleId === 2">
             <el-icon><UserFilled /></el-icon>
             <span>用户管理</span>
-          </el-menu-item>
+          </el-menu-item> -->
 
           <!-- ====================== 学生 roleId = 3 ====================== -->
           <el-menu-item index="8" v-if="userStore.roleId === 3" @click="toRecord">
@@ -153,6 +158,12 @@ const toCollegeManager = () => {
 const toUserManager = () => {
   activeMenu.value = '1-1'
   router.push('/user-manager')
+}
+
+// 跳转到学生管理界面
+const toStudentManager = () => {
+  activeMenu.value = '3'
+  router.push('/student-manager')
 }
 
 // 跳转到个人信息

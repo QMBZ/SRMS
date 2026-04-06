@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -186,5 +187,18 @@ public class StudentInfoController {
             return Result.success("修改学生信息成功", success);
         }
         return Result.error("修改学生信息失败");
+    }
+
+    /**
+     * 获取可选择的学籍状态列表
+     */
+    @Operation(summary = "获取可选择的学籍状态列表")
+    @PostMapping("/getAllStudentStatus")
+    public Result<List<String>> getAllStudentStatus() {
+        // 定义8个学籍状态字符串
+        List<String> statusList = Arrays.asList(
+            "在读", "休学", "复学", "保留", "毕业", "结业", "退学", "开除"
+        );
+        return Result.success("查询学籍状态列表成功", statusList);
     }
 }
