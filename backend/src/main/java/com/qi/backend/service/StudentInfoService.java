@@ -1,14 +1,20 @@
 package com.qi.backend.service;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qi.backend.entity.StudentInfo;
 import com.qi.backend.mapper.StudentInfoMapper;
+import com.qi.backend.util.LocalDateConverter;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -107,5 +113,112 @@ public class StudentInfoService {
     public Boolean updateStudentInfo(StudentInfo studentInfo) {
         int count = studentInfoMapper.updateStudentInfoById(studentInfo);
         return count > 0;
+    }
+
+    /**
+     * 导出空 Excel 模板
+     */
+    public void exportEmptyTemplate(HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String fileName = URLEncoder.encode("学生信息导入模板", "UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        // 重点修复：必须传空集合，不能传 null！
+        EasyExcel.write(response.getOutputStream())
+                .head(StudentInfo.class)
+                .registerConverter(new LocalDateConverter())
+                .excelType(ExcelTypeEnum.XLSX)
+                .sheet("学生模板")
+                .doWrite(List.of()); // 这里必须是空集合，修复下载失败
+    }
+
+    /**
+     * 按条件导出学生（对接你现有的多条件模糊查询）
+     */
+    public void exportByCondition(StudentInfo condition, HttpServletResponse response) throws IOException {
+        List<StudentInfo> list = studentInfoMapper.selectStudentInfosByConditionPage(condition);
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String fileName = URLEncoder.encode("学生信息列表", "UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        EasyExcel.write(response.getOutputStream())
+                .head(StudentInfo.class)
+                .registerConverter(new LocalDateConverter())
+                .sheet("学生数据")
+                .doWrite(list);
+    }
+
+    /**
+     * 导入 Excel → 批量更新（只修改有值的字段）
+     * 规则：
+     * 1. 必须传 studentId
+     * 2. 只有 Excel 中有值的字段才更新
+     * 3. 空字段不覆盖数据库
+     */
+    public void importExcel(List<StudentInfo> excelList) {
+        for (StudentInfo excel : excelList) {
+            // 必须有 ID 才能更新
+            if (excel.getStudentId() == null) {
+                continue;
+            }
+            // 从数据库查原始数据
+            StudentInfo dbStudent = studentInfoMapper.selectStudentInfoById(excel.getStudentId());
+            if (dbStudent == null) {
+                continue;
+            }
+
+            // ========== 核心：只覆盖 Excel 里有值的字段 ==========
+            if (excel.getStudentNo() != null && !excel.getStudentNo().isEmpty()) {
+                dbStudent.setStudentNo(excel.getStudentNo());
+            }
+            if (excel.getRealName() != null && !excel.getRealName().isEmpty()) {
+                dbStudent.setRealName(excel.getRealName());
+            }
+            if (excel.getGender() != null && !excel.getGender().isEmpty()) {
+                dbStudent.setGender(excel.getGender());
+            }
+            if (excel.getIdCard() != null && !excel.getIdCard().isEmpty()) {
+                dbStudent.setIdCard(excel.getIdCard());
+            }
+            if (excel.getNation() != null && !excel.getNation().isEmpty()) {
+                dbStudent.setNation(excel.getNation());
+            }
+            if (excel.getNativePlace() != null && !excel.getNativePlace().isEmpty()) {
+                dbStudent.setNativePlace(excel.getNativePlace());
+            }
+            if (excel.getPhone() != null && !excel.getPhone().isEmpty()) {
+                dbStudent.setPhone(excel.getPhone());
+            }
+            if (excel.getEmail() != null && !excel.getEmail().isEmpty()) {
+                dbStudent.setEmail(excel.getEmail());
+            }
+            if (excel.getPhotoUrl() != null && !excel.getPhotoUrl().isEmpty()) {
+                dbStudent.setPhotoUrl(excel.getPhotoUrl());
+            }
+            if (excel.getCollegeId() != null) {
+                dbStudent.setCollegeId(excel.getCollegeId());
+            }
+            if (excel.getMajorId() != null) {
+                dbStudent.setMajorId(excel.getMajorId());
+            }
+            if (excel.getClassId() != null) {
+                dbStudent.setClassId(excel.getClassId());
+            }
+            if (excel.getEnrollmentTime() != null) {
+                dbStudent.setEnrollmentTime(excel.getEnrollmentTime());
+            }
+            if (excel.getGraduationTime() != null) {
+                dbStudent.setGraduationTime(excel.getGraduationTime());
+            }
+            if (excel.getStudentStatus() != null && !excel.getStudentStatus().isEmpty()) {
+                dbStudent.setStudentStatus(excel.getStudentStatus());
+            }
+
+            // 执行更新（你Mapper本来就是动态更新，完美匹配）
+            studentInfoMapper.updateStudentInfoById(dbStudent);
+        }
     }
 }

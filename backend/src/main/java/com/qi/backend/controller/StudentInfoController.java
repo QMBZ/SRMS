@@ -1,18 +1,26 @@
 package com.qi.backend.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.github.pagehelper.PageInfo;
 import com.qi.backend.entity.StudentInfo;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.StudentInfoService;
+import com.qi.backend.util.LocalDateConverter;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -192,5 +200,49 @@ public class StudentInfoController {
             "在读", "休学", "复学", "保留", "毕业", "结业", "退学", "开除"
         );
         return Result.success("查询学籍状态列表成功", statusList);
+    }
+
+    /**
+     * 下载空模板（文件下载，不需要返回 Result）
+     */
+    @Operation(summary = "导出模板")
+    @GetMapping("/export/template")
+    public void exportTemplate(HttpServletResponse response) throws IOException {
+        studentInfoService.exportEmptyTemplate(response);
+    }
+
+    /**
+     * 2. 按条件导出数据（文件下载，不需要返回 Result）
+     */
+    @Operation(summary = "导出学生信息数据")
+    @GetMapping("/export/condition")
+    public void exportByCondition(StudentInfo condition, HttpServletResponse response) throws IOException {
+        studentInfoService.exportByCondition(condition, response);
+    }
+
+    /**
+     * 导入 Excel → 批量更新（返回统一 Result）
+     */
+    @Operation(summary = "导入学生数据")
+    @PostMapping("/import")
+    public Result<Boolean> importExcel(@RequestParam("file") MultipartFile file) {
+        try {
+            // 读取 Excel
+            List<StudentInfo> list = EasyExcel.read(file.getInputStream())
+                    .registerConverter(new LocalDateConverter())
+                    .head(StudentInfo.class)
+                    .sheet()
+                    .doReadSync();
+
+            // 执行导入更新
+            studentInfoService.importExcel(list);
+
+            // 返回统一成功结果
+            return Result.success("Excel导入成功，共处理 " + list.size() + " 条数据", Boolean.TRUE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 返回统一失败结果
+            return Result.error("Excel导入失败：" + e.getMessage());
+        }
     }
 }
