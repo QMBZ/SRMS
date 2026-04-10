@@ -37,9 +37,8 @@ public class UserController {
 
     /**
      * 根据用户ID查询用户
-     * 前端传：{ "userId": 1 }
      */
-    @Operation(summary = "根据用户ID查询用户", description = "前端传：{ \"userId\": 1 }")
+    @Operation(summary = "根据用户ID查询用户", description = "前端传：1")
     @PostMapping("/getUserById")
     public Result<User> getUserById(@RequestBody Long userId) {
         if (userId == null) {
@@ -51,9 +50,8 @@ public class UserController {
 
     /**
      * 根据用户名（学号/工号）查询用户
-     * 前端传：{ "username": "2026001" }
      */
-    @Operation(summary = "根据用户名（学号/工号）查询用户", description = "前端传：{ \"username\": \"2026001\" }")
+    @Operation(summary = "根据用户名（学号/工号）查询用户", description = "前端传：2026001")
     @PostMapping("/getUserByUsername")
     public Result<User> getUserByUsername(@RequestBody String username) {
         if (username == null || username.trim().isEmpty()) {
@@ -65,9 +63,8 @@ public class UserController {
 
     /**
      * 根据角色ID查询用户列表
-     * 前端传：{ "roleId": 1 }
      */
-    @Operation(summary = "根据角色ID查询用户列表", description = "前端传：{ \"roleId\": 1 }")
+    @Operation(summary = "根据角色ID查询用户列表", description = "前端传：1")
     @PostMapping("/getUsersByRoleId")
     public Result<List<User>> getUsersByRoleId(@RequestBody Integer roleId) {
         if (roleId == null) {
@@ -79,9 +76,8 @@ public class UserController {
 
     /**
      * 根据账号状态查询用户列表
-     * 前端传：{ "status": 1 }
      */
-    @Operation(summary = "根据账号状态查询用户列表", description = "前端传：{ \"status\": 1 }")
+    @Operation(summary = "根据账号状态查询用户列表", description = "前端传：1")
     @PostMapping("/getUsersByStatus")
     public Result<List<User>> getUsersByStatus(@RequestBody Integer status) {
         if (status == null) {
@@ -93,9 +89,8 @@ public class UserController {
 
     /**
      * 分页查询用户
-     * 前端传：{ "pageNum": 1, "pageSize": 10 }
      */
-    @Operation(summary = "分页查询用户", description = "前端传：{ \"pageNum\": 1, \"pageSize\": 10 }")
+    @Operation(summary = "分页查询用户")
     @PostMapping("/getUserByPage")
     public Result<PageInfo<User>> getUserByPage(Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {

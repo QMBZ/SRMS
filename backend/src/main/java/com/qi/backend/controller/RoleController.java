@@ -34,9 +34,8 @@ public class RoleController {
     // ====================== 修复后的接口 ======================
     /**
      * 根据 ID 查询角色
-     * 前端直接传 { "roleId": 1 } 即可，最简单！
      */
-    @Operation(summary = "根据ID查询角色", description = "前端直接传 { \"roleId\": 1 } 即可，最简单！")
+    @Operation(summary = "根据ID查询角色", description = "1")
     @PostMapping("/getRoleById")
     public Result<Role> getRoleById(@RequestBody Integer roleId) {
         if (roleId == null) {

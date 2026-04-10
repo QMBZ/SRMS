@@ -24,7 +24,6 @@ public class MajorController {
 
     /**
      * 获取所有专业
-     * 前端传：{}
      */
     @Operation(summary = "获取所有专业", description = "前端传：{}")
     @PostMapping("/getAllMajors")
@@ -35,9 +34,8 @@ public class MajorController {
 
     /**
      * 根据ID查询专业
-     * 前端传：{ "majorId": 1 }
      */
-    @Operation(summary = "根据ID查询专业", description = "前端传：{ \"majorId\": 1 }")
+    @Operation(summary = "根据ID查询专业", description = "前端传：1")
     @PostMapping("/getMajorById")
     public Result<Major> getMajorById(@RequestBody Long majorId) {
         if (majorId == null) {
@@ -49,9 +47,8 @@ public class MajorController {
 
     /**
      * 根据专业编码查询专业
-     * 前端传：{ "majorCode": "2531" }
      */
-    @Operation(summary = "根据专业编码查询专业", description = "前端传：{ \"majorCode\": \"2531\" }")
+    @Operation(summary = "根据专业编码查询专业", description = "前端传：2531")
     @PostMapping("/getMajorByCode")
     public Result<Major> getMajorByCode(@RequestBody String majorCode) {
         if (majorCode == null || majorCode.trim().isEmpty()) {
@@ -63,9 +60,8 @@ public class MajorController {
 
     /**
      * 根据学院ID查询专业列表
-     * 前端传：{ "collegeId": 1 }
      */
-    @Operation(summary = "根据学院ID查询专业列表", description = "前端传：{ \"collegeId\": 1 }")
+    @Operation(summary = "根据学院ID查询专业列表", description = "前端传：1")
     @PostMapping("/getMajorsByCollegeId")
     public Result<List<Major>> getMajorsByCollegeId(@RequestBody Long collegeId) {
         if (collegeId == null) {
@@ -77,9 +73,8 @@ public class MajorController {
 
     /**
      * 分页查询专业
-     * 前端传：{ "pageNum": 1, "pageSize": 10 }
      */
-    @Operation(summary = "分页查询专业", description = "前端传：{ \"pageNum\": 1, \"pageSize\": 10 }")
+    @Operation(summary = "分页查询专业")
     @PostMapping("/getMajorsByPage")
     public Result<PageInfo<Major>> getMajorsByPage(Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
