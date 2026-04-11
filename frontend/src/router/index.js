@@ -15,6 +15,7 @@ import UserManagerView from '@/views/UserManagerView.vue'
 import StudentManagerView from '@/views/StudentManagerView.vue'
 import ScoreView from '@/views/ScoreView.vue'
 import ScoreManagerView from '@/views/ScoreManagerView.vue'
+import GraduateManagerView from '@/views/GraduateManagerView.vue'
 
 const routes = [
   {
@@ -32,6 +33,7 @@ const routes = [
       { path: 'profile', component: ProfileView },
       { path: 'score', component: ScoreView },
       { path: 'score-manager', component: ScoreManagerView },
+      { path: 'graduate-manager', component: GraduateManagerView },
     ],
     meta: { requiresAuth: true },
   },

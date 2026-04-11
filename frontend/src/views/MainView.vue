@@ -58,7 +58,7 @@
             <span>成绩管理</span>
           </el-menu-item>
 
-          <el-menu-item index="5" v-if="userStore.roleId !== 3" @click="">
+          <el-menu-item index="5" v-if="userStore.roleId !== 3" @click="toGraduateManager">
             <el-icon><Clock /></el-icon>
             <span>毕业管理</span>
           </el-menu-item>
@@ -185,6 +185,12 @@ const toStudentManager = () => {
 const toScoreManager = () => {
   activeMenu.value = '4'
   router.push('/score-manager')
+}
+
+// 跳转到毕业管理界面
+const toGraduateManager = () => {
+  activeMenu.value = '5'
+  router.push('/graduate-manager')
 }
 
 // 跳转到个人成绩界面

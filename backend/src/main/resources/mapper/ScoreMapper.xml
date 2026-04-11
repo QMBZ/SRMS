@@ -72,8 +72,8 @@
             IFNULL(SUM(CASE WHEN sc.score &lt; 60 THEN 1 ELSE 0 END), 0) as fail_count,
             IFNULL(SUM(CASE WHEN sc.score &lt; 60 THEN 1 ELSE 0 END), 0) = 0 as graduate_status
         from student_info s
-        left join college c on s.college_id = c.college_id
-        left join major m on s.major_id = m.major_id
+        left join colleges c on s.college_id = c.college_id
+        left join majors m on s.major_id = m.major_id
         left join scores sc on s.student_no = sc.student_no
         where s.student_status = '在读'
         <if test="collegeId != null">
