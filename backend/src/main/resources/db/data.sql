@@ -12,3 +12,5 @@ RUNSCRIPT FROM 'classpath:/db/data/05_users.sql';
 RUNSCRIPT FROM 'classpath:/db/data/06_admin_college.sql';
 
 RUNSCRIPT FROM 'classpath:/db/data/07_student_info.sql';
+
+RUNSCRIPT FROM 'classpath:/db/data/08_scores.sql';

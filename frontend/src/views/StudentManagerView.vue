@@ -53,6 +53,8 @@
           <el-button type="success" @click="openAdd">新增学生</el-button>
           <el-button type="warning" @click="handleExport">导出学生数据</el-button>
           <el-button type="primary" @click="handleImport">导入学生数据</el-button>
+          <el-button type="info" @click="handleExportTemplate">导出模板</el-button>
+          <el-button type="success" @click="handleImportAdd">批量添加学生</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -66,7 +68,6 @@
         <el-table-column label="学院" prop="collegeName" min-width="150" />
         <el-table-column label="专业" prop="majorName" min-width="150" />
         <el-table-column label="班级" prop="className" min-width="160" />
-        <!-- <el-table-column label="年级" prop="grade" width="100" /> -->
         <el-table-column label="学籍状态" prop="studentStatus" width="110">
           <template #default="scope">
             <el-tag :type="getStatusTagType(scope.row.studentStatus)">
@@ -725,6 +726,59 @@ const handleImport = () => {
     } catch (err) {
       console.error('导入失败', err)
       ElMessage.error('导入失败，请检查文件格式')
+    } finally {
+      loading.value = false
+      input.value = ''
+    }
+  }
+  input.click()
+}
+
+// 导出学生新增模板
+const handleExportTemplate = async () => {
+  try {
+    loading.value = true
+    const res = await post('/student/export/add/template', {}, { responseType: 'blob' })
+    const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `学生信息导入模板.xlsx`
+    a.click()
+    URL.revokeObjectURL(url)
+    ElMessage.success('模板导出成功')
+  } catch (err) {
+    console.error('导出模板失败', err)
+    ElMessage.error('导出模板失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 批量添加学生（导入新增专用）
+const handleImportAdd = () => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = '.xlsx,.xls'
+  input.onchange = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    const formData = new FormData()
+    formData.append('file', file)
+    try {
+      loading.value = true
+      const res = await post('/student/import/add', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      if (res.code === 200) {
+        ElMessage.success(res.msg || '批量添加成功')
+        getList()
+      } else {
+        ElMessage.error(res.msg || '批量添加失败')
+      }
+    } catch (err) {
+      console.error('批量添加失败', err)
+      ElMessage.error('批量添加失败，请检查文件格式')
     } finally {
       loading.value = false
       input.value = ''

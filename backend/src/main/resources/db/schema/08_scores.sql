@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS scores (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
+    student_no VARCHAR(20) NOT NULL COMMENT '学号',
+    course_name VARCHAR(100) NOT NULL COMMENT '课程名称',
+    score DECIMAL(5,1) DEFAULT 0.0 COMMENT '成绩',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (student_no) REFERENCES student_info(student_no) ON DELETE CASCADE,
+    UNIQUE KEY (student_no, course_name)
+) COMMENT = '学生成绩表';
