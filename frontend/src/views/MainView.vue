@@ -53,7 +53,7 @@
             <span>学生管理</span>
           </el-menu-item>
 
-          <el-menu-item index="4" v-if="userStore.roleId !== 3" @click="">
+          <el-menu-item index="4" v-if="userStore.roleId !== 3" @click="toScoreManager">
             <el-icon><PieChart /></el-icon>
             <span>成绩管理</span>
           </el-menu-item>
@@ -179,6 +179,12 @@ const toUserManager = () => {
 const toStudentManager = () => {
   activeMenu.value = '3'
   router.push('/student-manager')
+}
+
+// 跳转到成绩管理界面
+const toScoreManager = () => {
+  activeMenu.value = '4'
+  router.push('/score-manager')
 }
 
 // 跳转到个人成绩界面
