@@ -51,6 +51,8 @@
           <el-button type="primary" @click="getList">查询</el-button>
           <el-button @click="resetQuery">重置</el-button>
           <el-button type="success" @click="openAdd">新增学生</el-button>
+          <el-button type="warning" @click="handleExport">导出学生数据</el-button>
+          <el-button type="primary" @click="handleImport">导入学生数据</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -658,6 +660,77 @@ const resetForm = () => {
     studentStatus: '在读',
   })
   formRef.value?.clearValidate()
+}
+
+// 导出学生数据（按当前查询条件）
+const handleExport = async () => {
+  try {
+    loading.value = true
+    // 构造和查询一致的条件
+    const params = {
+      studentNo: queryParams.studentNo?.trim() || null,
+      realName: queryParams.realName?.trim() || null,
+      collegeId: queryParams.collegeId ? Number(queryParams.collegeId) : null,
+      majorId: queryParams.majorId ? Number(queryParams.majorId) : null,
+      studentStatus: queryParams.studentStatus || null,
+    }
+
+    // 调用后端导出接口（文件流下载）
+    const res = await post('/student/export/condition', params, {
+      responseType: 'blob', // 必须加，文件下载
+    })
+
+    // 下载文件
+    const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `学生学籍信息_${new Date().getTime()}.xlsx`
+    a.click()
+    URL.revokeObjectURL(url)
+    ElMessage.success('导出成功')
+  } catch (err) {
+    console.error('导出失败', err)
+    ElMessage.error('导出失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 导入学生数据
+const handleImport = () => {
+  // 创建隐藏文件选择框
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = '.xlsx,.xls'
+  input.onchange = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    // FormData 包装文件
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      loading.value = true
+      const res = await post('/student/import', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      if (res.code === 200) {
+        ElMessage.success(res.msg || '导入成功')
+        getList() // 刷新表格
+      } else {
+        ElMessage.error(res.msg || '导入失败')
+      }
+    } catch (err) {
+      console.error('导入失败', err)
+      ElMessage.error('导入失败，请检查文件格式')
+    } finally {
+      loading.value = false
+      input.value = ''
+    }
+  }
+  input.click()
 }
 
 // ====================== 初始化 ======================
