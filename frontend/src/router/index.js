@@ -13,6 +13,8 @@ import MajorManagerView from '@/views/MajorManagerView.vue'
 import CollegeManagerView from '@/views/CollegeManagerView.vue'
 import UserManagerView from '@/views/UserManagerView.vue'
 import StudentManagerView from '@/views/StudentManagerView.vue'
+import ScoreView from '@/views/ScoreView.vue'
+import ScoreManagerView from '@/views/ScoreManagerView.vue'
 
 const routes = [
   {
@@ -28,6 +30,8 @@ const routes = [
       { path: 'user-manager', component: UserManagerView },
       { path: 'student-manager', component: StudentManagerView },
       { path: 'profile', component: ProfileView },
+      { path: 'score', component: ScoreView },
+      { path: 'score-manager', component: ScoreManagerView },
     ],
     meta: { requiresAuth: true },
   },

@@ -53,6 +53,16 @@
             <span>学生管理</span>
           </el-menu-item>
 
+          <el-menu-item index="4" v-if="userStore.roleId !== 3" @click="">
+            <el-icon><PieChart /></el-icon>
+            <span>成绩管理</span>
+          </el-menu-item>
+
+          <el-menu-item index="5" v-if="userStore.roleId !== 3" @click="">
+            <el-icon><Clock /></el-icon>
+            <span>毕业管理</span>
+          </el-menu-item>
+
           <!-- <el-menu-item index="4" v-if="userStore.roleId === 2">
             <el-icon><User /></el-icon>
             <span>学生管理</span>
@@ -76,6 +86,11 @@
           <el-menu-item index="8" v-if="userStore.roleId === 3" @click="toRecord">
             <el-icon><Document /></el-icon>
             <span>我的学籍信息</span>
+          </el-menu-item>
+
+          <el-menu-item index="9" v-if="userStore.roleId === 3" @click="toScore">
+            <el-icon><TrendCharts /></el-icon>
+            <span>我的成绩</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -110,7 +125,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Menu, School, User, UserFilled, Document } from '@element-plus/icons-vue'
+import { Menu, School, User, TrendCharts, Document, Clock, PieChart } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
@@ -164,6 +179,12 @@ const toUserManager = () => {
 const toStudentManager = () => {
   activeMenu.value = '3'
   router.push('/student-manager')
+}
+
+// 跳转到个人成绩界面
+const toScore = () => {
+  activeMenu.value = '9'
+  router.push('/score')
 }
 
 // 跳转到个人信息
