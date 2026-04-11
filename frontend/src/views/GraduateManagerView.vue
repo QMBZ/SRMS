@@ -72,16 +72,16 @@
       </el-table>
 
       <!-- 纯前端分页组件 -->
-        <el-pagination
-          v-model:current-page="pageNum"
-          v-model:page-size="pageSize"
-          :total="total"
-          :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleFrontPageChange"
-          @current-change="handleFrontPageChange"
-          class="pagination"
-        />
+      <el-pagination
+        v-model:current-page="pageNum"
+        v-model:page-size="pageSize"
+        :total="total"
+        :page-sizes="[10, 20, 50, 100]"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleFrontPageChange"
+        @current-change="handleFrontPageChange"
+        class="pagination"
+      />
     </el-card>
   </div>
 </template>
@@ -311,8 +311,8 @@ onMounted(async () => {
 }
 
 .pagination {
-    margin-top: 12px;
-    text-align: right;
-    flex-shrink: 0;
+  margin-top: 12px;
+  text-align: right;
+  flex-shrink: 0;
 }
 </style>
