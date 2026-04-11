@@ -2,6 +2,7 @@ package com.qi.backend.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.github.pagehelper.PageInfo;
+import com.qi.backend.entity.StudentImportAdd;
 import com.qi.backend.entity.StudentInfo;
 import com.qi.backend.model.Result;
 import com.qi.backend.service.StudentInfoService;
@@ -12,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -206,7 +207,7 @@ public class StudentInfoController {
      * 下载空模板（文件下载，不需要返回 Result）
      */
     @Operation(summary = "导出模板")
-    @GetMapping("/export/template")
+    @PostMapping("/export/template")
     public void exportTemplate(HttpServletResponse response) throws IOException {
         studentInfoService.exportEmptyTemplate(response);
     }
@@ -215,7 +216,7 @@ public class StudentInfoController {
      * 2. 按条件导出数据（文件下载，不需要返回 Result）
      */
     @Operation(summary = "导出学生信息数据")
-    @GetMapping("/export/condition")
+    @PostMapping("/export/condition")
     public void exportByCondition(StudentInfo condition, HttpServletResponse response) throws IOException {
         studentInfoService.exportByCondition(condition, response);
     }
@@ -244,5 +245,38 @@ public class StudentInfoController {
             // 返回统一失败结果
             return Result.error("Excel导入失败：" + e.getMessage());
         }
+    }
+
+    /**
+     * Excel 批量新增学生（先创建用户，再创建学生）
+     */
+    @Operation(summary = "Excel批量新增学生")
+    @PostMapping("/import/add")
+    public Result<Boolean> importAddExcel(@RequestParam("file") MultipartFile file) {
+        try {
+            // 读取新增专用模板
+            List<StudentImportAdd> list = EasyExcel.read(file.getInputStream())
+                    .registerConverter(new LocalDateConverter())
+                    .head(StudentImportAdd.class)
+                    .sheet()
+                    .doReadSync();
+
+            // 执行批量新增
+            studentInfoService.importAddExcel(list);
+
+            return Result.success("Excel批量新增成功，共导入 " + list.size() + " 条数据", Boolean.TRUE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("批量新增失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 下载【学生新增】专用空模板
+     */
+    @Operation(summary = "导出新增学生模板")
+    @PostMapping("/export/add/template")
+    public void exportAddTemplate(HttpServletResponse response) throws IOException {
+        studentInfoService.exportAddTemplate(response);
     }
 }

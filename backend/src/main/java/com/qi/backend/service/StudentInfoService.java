@@ -5,12 +5,16 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.qi.backend.entity.StudentImportAdd;
 import com.qi.backend.entity.StudentInfo;
+import com.qi.backend.entity.User;
 import com.qi.backend.mapper.StudentInfoMapper;
 import com.qi.backend.util.LocalDateConverter;
 
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class StudentInfoService {
 
     private final StudentInfoMapper studentInfoMapper;
+    private final UserService userService;
 
     /**
      * 获取所有学生信息
@@ -220,5 +225,89 @@ public class StudentInfoService {
             // 执行更新（你Mapper本来就是动态更新，完美匹配）
             studentInfoMapper.updateStudentInfoById(dbStudent);
         }
+    }
+
+    /**
+     * Excel 批量新增学生：先创建用户 → 再创建学生
+     * 规则：
+     * 1. 学号必须存在
+     * 2. 已存在的学号跳过（不覆盖）
+     * 3. 用户默认密码、默认角色3、默认状态1
+     * 4. 学生字段使用数据库默认值
+     */
+    @Transactional(rollbackFor = Exception.class) // 事务：失败全部回滚
+    public void importAddExcel(List<StudentImportAdd> excelList) {
+        for (StudentImportAdd excel : excelList) {
+            try {
+                // 1. 基础校验
+                if (StringUtils.isBlank(excel.getStudentNo())
+                        || StringUtils.isBlank(excel.getRealName())
+                        || StringUtils.isBlank(excel.getGender())
+                        || StringUtils.isBlank(excel.getIdCard())
+                        || excel.getCollegeId() == null
+                        || excel.getMajorId() == null
+                        || excel.getClassId() == null
+                        || excel.getEnrollmentTime() == null) {
+                    continue; // 必填项为空直接跳过
+                }
+
+                // 2. 判断学号是否已存在（存在则跳过）
+                StudentInfo exist = studentInfoMapper.selectStudentInfoByStudentNo(excel.getStudentNo());
+                if (exist != null) {
+                    continue;
+                }
+
+                // ===================== 3. 先创建用户 =====================
+                User user = new User();
+                user.setUsername(excel.getStudentNo()); // 用户名=学号
+                user.setRealName(excel.getRealName());
+                // 默认值（你表结构里已经有默认，这里可以不设，设了更安全）
+                user.setRoleId(3);    // 学生角色
+                user.setStatus(1);    // 正常状态
+                // 密码用你表默认的加密串，不用传
+
+                // 调用你现有的新增用户方法
+                userService.addUser(user);
+
+                // ===================== 4. 再创建学生 =====================
+                StudentInfo student = new StudentInfo();
+                student.setStudentNo(excel.getStudentNo());
+                student.setRealName(excel.getRealName());
+                student.setGender(excel.getGender());
+                student.setIdCard(excel.getIdCard());
+                student.setNation(excel.getNation());
+                student.setNativePlace(excel.getNativePlace());
+                student.setPhone(excel.getPhone());
+                student.setEmail(excel.getEmail());
+                student.setCollegeId(excel.getCollegeId());
+                student.setMajorId(excel.getMajorId());
+                student.setClassId(excel.getClassId());
+                student.setEnrollmentTime(excel.getEnrollmentTime());
+
+                // 调用你现有的新增学生方法
+                addStudentInfo(student);
+
+            } catch (Exception e) {
+                // 单条失败不影响整体
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 导出【学生批量新增】空模板
+     */
+    public void exportAddTemplate(HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String fileName = URLEncoder.encode("学生批量新增模板", "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        EasyExcel.write(response.getOutputStream())
+                .head(StudentImportAdd.class)
+                .registerConverter(new LocalDateConverter())
+                .excelType(ExcelTypeEnum.XLSX)
+                .sheet("学生新增")
+                .doWrite(List.of());
     }
 }

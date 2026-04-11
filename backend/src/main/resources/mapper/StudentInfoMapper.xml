@@ -106,15 +106,41 @@
 
     <!-- 新增学生信息 -->
     <insert id="insertStudentInfo">
-        insert into student_info(
-            student_no, real_name, gender, id_card, nation, native_place,
-            phone, email, photo_url, college_id, major_id, class_id,
-            enrollment_time, graduation_time, student_status
-        ) values (
-            #{studentNo}, #{realName}, #{gender}, #{idCard}, #{nation}, #{nativePlace},
-            #{phone}, #{email}, #{photoUrl}, #{collegeId}, #{majorId}, #{classId},
-            #{enrollmentTime}, #{graduationTime}, #{studentStatus}
-        )
+        insert into student_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentNo != null">student_no,</if>
+            <if test="realName != null">real_name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="nation != null">nation,</if>
+            <if test="nativePlace != null">native_place,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="photoUrl != null">photo_url,</if>
+            <if test="collegeId != null">college_id,</if>
+            <if test="majorId != null">major_id,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="enrollmentTime != null">enrollment_time,</if>
+            <if test="graduationTime != null">graduation_time,</if>
+            <if test="studentStatus != null">student_status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentNo != null">#{studentNo},</if>
+            <if test="realName != null">#{realName},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="nation != null">#{nation},</if>
+            <if test="nativePlace != null">#{nativePlace},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="photoUrl != null">#{photoUrl},</if>
+            <if test="collegeId != null">#{collegeId},</if>
+            <if test="majorId != null">#{majorId},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="enrollmentTime != null">#{enrollmentTime},</if>
+            <if test="graduationTime != null">#{graduationTime},</if>
+            <if test="studentStatus != null">#{studentStatus},</if>
+        </trim>
     </insert>
 
     <!-- 根据 ID 修改学生信息 -->
