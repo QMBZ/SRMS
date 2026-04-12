@@ -8,7 +8,7 @@
 
     <!-- 功能区 -->
     <div class="tool-box">
-      <!-- 学院筛选 + 前置文字 -->
+      <!-- 学院筛选 -->
       <div class="search-row">
         <span class="label-text">选择学院：</span>
         <el-select
@@ -124,16 +124,12 @@ const bindRules = {
   username: [{ required: true, message: '请输入工号/账号', trigger: 'blur' }],
 }
 
-// ======================
 // 日期格式化
-// ======================
 const formatDateTime = (row, column) => {
   return formatDate(row.createTime)
 }
 
-// ======================
-// 1. 页面加载
-// ======================
+// 页面加载
 onMounted(() => {
   if (userStore.roleId !== 1) {
     ElMessage.warning('没有此界面的访问权限')
@@ -145,9 +141,7 @@ onMounted(() => {
   getAdminList()
 })
 
-// ======================
-// 2. 获取所有学院列表
-// ======================
+// 获取所有学院列表
 const getAllCollegeList = async () => {
   try {
     const res = await post('/college/getAllColleges')
@@ -160,9 +154,7 @@ const getAllCollegeList = async () => {
   }
 }
 
-// ======================
-// 3. 获取学院管理员列表
-// ======================
+// 获取学院管理员列表
 const getAdminList = async () => {
   loading.value = true
   try {
@@ -185,9 +177,7 @@ const getAdminList = async () => {
   }
 }
 
-// ======================
-// 4. 加载用户+学院名称
-// ======================
+// 加载用户+学院名称
 const loadUserNameAndCollegeName = async (list) => {
   try {
     const result = []
@@ -209,9 +199,7 @@ const loadUserNameAndCollegeName = async (list) => {
   }
 }
 
-// ======================
-// 5. 打开绑定弹窗
-// ======================
+// 打开绑定弹窗
 const openBindDialog = () => {
   // 重置表单
   bindForm.username = ''
@@ -219,16 +207,14 @@ const openBindDialog = () => {
   bindDialogVisible.value = true
 }
 
-// ======================
-// 6. 执行绑定
-// ======================
+// 绑定
 const handleBind = async () => {
   const valid = await bindFormRef.value?.validate()
   if (!valid) return
 
   btnLoading.value = true
   try {
-    // 1. 根据用户名/工号查询用户信息
+    // 根据用户名/工号查询用户信息
     const userRes = await post('/user/getUserByUsername', bindForm.username)
     if (!userRes.data) {
       ElMessage.error('未找到该用户，请检查工号')
@@ -236,7 +222,7 @@ const handleBind = async () => {
     }
     const user = userRes.data
 
-    // 2. 执行学院管理员绑定
+    // 学院管理员绑定
     const bindRes = await post('/adminCollege/add', {
       userId: user.userId,
       collegeId: bindForm.collegeId,
@@ -247,7 +233,7 @@ const handleBind = async () => {
       return
     }
 
-    // 3. 更新角色为学院管理员(2) + 启用用户
+    // 更新角色为学院管理员(2) + 启用用户
     user.roleId = 2
     user.status = 1 // 启动
     await post('/user/updateUser', user)
@@ -263,22 +249,20 @@ const handleBind = async () => {
   }
 }
 
-// ======================
-// 7. 解绑操作
-// ======================
+// 解绑操作
 const handleUnbind = async (row) => {
   try {
     await ElMessageBox.confirm('解绑后该用户将被禁用，确定继续吗？', '提示', { type: 'warning' })
 
     loading.value = true
-    // 1. 解绑
+    // 解绑
     const res = await post('/adminCollege/unbind', {
       userId: row.userId,
       collegeId: row.collegeId,
     })
 
     if (res.code === 200) {
-      // 2. 禁用用户
+      // 禁用用户
       const userRes = await post('/user/getUserById', { userId: row.userId })
       if (userRes.data) {
         const user = userRes.data
@@ -300,7 +284,6 @@ const handleUnbind = async (row) => {
 </script>
 
 <style scoped>
-/* 页面容器 - 子页面样式，不占全屏 */
 .college-admin-page {
   padding: 24px;
   background-color: #f5f7fa;

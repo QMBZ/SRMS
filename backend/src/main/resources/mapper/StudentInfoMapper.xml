@@ -64,7 +64,7 @@
         select * from student_info where student_status = #{studentStatus}
     </select>
 
-    <!-- 分页查询所有学生信息（配合 PageHelper 使用） -->
+    <!-- 分页查询所有学生信息 PageHelper -->
     <select id="selectStudentInfosByPage" resultMap="StudentInfoResultMap">
         select * from student_info order by create_time desc
     </select>

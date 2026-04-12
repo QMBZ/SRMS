@@ -56,7 +56,7 @@ const loginRules = {
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 }
 
-// =============== 登录提交 ===============
+// 登录
 const handleLogin = async () => {
   // 表单校验
   const valid = await loginFormRef.value?.validate()
@@ -147,12 +147,10 @@ const handleLogin = async () => {
   margin-top: 10px;
 }
 
-/* 输入框统一样式优化 */
 :deep(.el-input) {
   --el-input-height: 44px;
 }
 
-/* 表单间距优化 */
 .el-form-item {
   margin-bottom: 22px;
 }

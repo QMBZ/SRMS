@@ -50,7 +50,7 @@ const router = createRouter({
   routes,
 })
 
-// =============== 路由守卫：判断是否登录 ===============
+// 路由守卫：判断是否登录
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   console.log(userStore)

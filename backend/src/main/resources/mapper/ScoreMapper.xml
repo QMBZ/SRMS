@@ -44,14 +44,14 @@
         select * from scores where id = #{id}
     </select>
 
-    <!-- 根据学号查询所有成绩（学生自己查看） -->
+    <!-- 根据学号查询所有成绩，学生调用-->
     <select id="selectScoresByStudentNo" resultMap="ScoreResultMap">
         select * from scores
         where student_no = #{studentNo}
         order by create_time desc
     </select>
 
-    <!-- ==================== 前端毕业资格展示专用 ==================== -->
+    <!-- 前端毕业资格展示 -->
     <resultMap id="StudentScoreGraduateResultMap" type="com.qi.backend.model.StudentScoreGraduateModel">
         <result column="student_id" property="studentId"/>
         <result column="student_no" property="studentNo"/>
@@ -86,7 +86,7 @@
         order by s.student_no asc
     </select>
 
-    <!-- 根据学号+课程名查询成绩（导入判重） -->
+    <!-- 根据学号+课程名查询成绩 导入判重 -->
     <select id="selectByStudentNoAndCourseName" resultMap="ScoreResultMap">
         select * from scores
         where student_no = #{studentNo}

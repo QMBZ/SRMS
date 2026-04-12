@@ -53,7 +53,6 @@
         </el-table-column>
         <el-table-column label="更新时间" prop="updateTime" width="200" :formatter="formatDateTime" />
         <el-table-column label="操作" width="320">
-          <!-- 加宽容纳新增按钮 -->
           <template #default="scope">
             <el-button type="primary" size="small" @click="openEdit(scope.row)">编辑</el-button>
             <!-- 重置密码按钮：红色 -->
@@ -167,7 +166,7 @@ const rules = {
   status: [{ required: true, message: '请选择状态', trigger: 'change' }],
 }
 
-// ====================== 获取所有角色 ======================
+// 获取所有角色
 const getAllRoles = async () => {
   try {
     const res = await post('/role/getAllRoles')
@@ -185,12 +184,12 @@ const getRoleName = (roleId) => {
   return item ? item.roleName : '未知角色'
 }
 
-// ====================== 日期格式化 ======================
+// 日期格式化
 const formatDateTime = (row) => {
   return formatDate(row.updateTime || row.createTime)
 }
 
-// ====================== 获取用户列表 ======================
+// 获取用户列表
 const getList = async () => {
   const userEntity = {
     username: queryParams.username?.trim() || null,
@@ -243,7 +242,7 @@ const resetQuery = () => {
   getList()
 }
 
-// ====================== 新增/编辑 ======================
+// 新增/编辑
 const openAdd = () => {
   isEdit.value = false
   dialogVisible.value = true
@@ -290,7 +289,7 @@ const resetForm = () => {
   formRef.value?.clearValidate()
 }
 
-// ====================== 重置密码（新增功能） ======================
+// 重置密码
 const resetPwd = async (row) => {
   try {
     await ElMessageBox.confirm('确定要重置该用户的密码吗？重置后将恢复为默认密码！', '温馨提示', {
@@ -298,7 +297,7 @@ const resetPwd = async (row) => {
       cancelButtonText: '取消',
       type: 'warning',
     })
-    // 调用后端接口，仅传userId
+    // 只传userId
     const res = await post('/user/resetPassword', row.userId)
     if (res.code === 200) {
       ElMessage.success('密码重置成功')
@@ -310,7 +309,7 @@ const resetPwd = async (row) => {
   }
 }
 
-// ====================== 切换状态（启用/禁用） ======================
+// 切换状态（启用/禁用）
 const changeStatus = async (row) => {
   const newStatus = row.status === 1 ? 0 : 1
   const text = newStatus === 1 ? '启用' : '禁用'

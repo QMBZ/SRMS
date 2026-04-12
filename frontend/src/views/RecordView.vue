@@ -82,18 +82,14 @@ const className = ref('暂无')
 // 身份证显示/隐藏控制（默认隐藏）
 const showIdCard = ref(false)
 
-// ======================
 // 身份证脱敏格式化（前6后4，中间****）
-// ======================
 const maskIdCard = (idCard) => {
   if (!idCard) return '未填写'
   if (idCard.length !== 18) return idCard
   return idCard.slice(0, 6) + '**********' + idCard.slice(-4)
 }
 
-// ======================
-// 1. 获取学生本人信息
-// ======================
+// 获取学生本人信息
 const getMyInfo = async () => {
   const studentNo = userStore.username
   if (!studentNo) {
@@ -122,9 +118,7 @@ const getMyInfo = async () => {
   }
 }
 
-// ======================
-// 2. 批量查询学院、专业、班级名称
-// ======================
+// 批量查询学院、专业、班级名称
 const getAllNames = async () => {
   const { collegeId, majorId, classId } = studentInfo.value
 
@@ -145,9 +139,7 @@ const getAllNames = async () => {
   }
 }
 
-// ======================
-// 3. 学籍状态样式（直接用数据库字符串）
-// ======================
+// 学籍状态样式
 const getStatusClass = (status) => {
   const map = {
     在读: 'status-normal',
@@ -237,7 +229,6 @@ onMounted(() => {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-/* 学籍状态样式（保持你原有逻辑，只微调更精致） */
 .status-normal {
   background: #e6f7ff;
   color: #1890ff;
@@ -262,10 +253,9 @@ onMounted(() => {
 /* 信息表格区域 */
 .info-form {
   flex: 1;
-  min-width: 0; /* 解决flex下文字溢出问题 */
+  min-width: 0;
 }
 
-/* 表格项间距优化 */
 :deep(.el-descriptions) {
   --el-descriptions-item-label-width: 150px !important;
 }

@@ -86,7 +86,7 @@
     <!-- 弹窗 -->
     <el-dialog v-model="dialogVisible" title="班级信息" width="520px" @close="resetForm">
       <el-form :model="form" :rules="rules" ref="formRef" label-width="110px">
-        <!-- 班级名称：自动生成，只读 -->
+        <!-- 班级名称：自动生成 只读 -->
         <el-form-item label="班级名称">
           <el-input v-model="form.className" placeholder="自动生成" readonly />
         </el-form-item>
@@ -151,7 +151,7 @@
           />
         </el-form-item>
 
-        <!-- 自动生成的班级编码（只读） -->
+        <!-- 自动生成的班级编码 只读 -->
         <el-form-item label="班级编码">
           <el-input v-model="form.classCode" placeholder="自动生成" readonly />
         </el-form-item>
@@ -230,9 +230,7 @@ const dialogVisible = ref(false)
 const formRef = ref(null)
 const isEdit = ref(false)
 
-// ======================
 // 学生列表相关
-// ======================
 const studentDialogVisible = ref(false)
 const studentLoading = ref(false)
 const studentList = ref([])
@@ -272,17 +270,15 @@ const resetStudentForm = () => {
   currentClassId.value = ''
 }
 
-// ======================
-// 表单数据（全自动生成）
-// ======================
+// 表单数据 自动生成
 const form = reactive({
   classId: '',
-  className: '', // 自动：专业+年级+班号
+  className: '', // 专业+年级+班号
   grade: '',
   collegeId: '',
   majorId: '',
   classNo: '', // 1-99
-  classCode: '', // 自动：年级+专业编码+班号
+  classCode: '', // 年级+专业编码+班号
 })
 
 // 校验规则
@@ -296,9 +292,7 @@ const rules = {
   ],
 }
 
-// ======================
-// 【核心】自动生成：班级名称 + 班级编码
-// ======================
+// 自动生成：班级名称 + 班级编码
 const autoGenerateAll = () => {
   const { grade, majorId, classNo } = form
   if (!grade || !majorId || !classNo) return
@@ -307,17 +301,15 @@ const autoGenerateAll = () => {
   const major = formMajorList.value.find((m) => m.majorId === majorId)
   if (!major) return
 
-  // 1. 生成班级名称：专业名称 + 年级 + 级 + 班号 + 班
+  // 生成班级名称：专业名称 + 年级 + 级 + 班号 + 班
   form.className = `${major.majorName}${grade}级${classNo}班`
 
-  // 2. 生成班级编码：年级 + 专业编码 + 两位班号
+  // 生成班级编码：年级 + 专业编码 + 两位班号
   const classNoStr = String(classNo).padStart(2, '0')
   form.classCode = `${grade}${major.majorCode}${classNoStr}`
 }
 
-// ======================
 // 获取所有学院
-// ======================
 const getAllColleges = async () => {
   try {
     const res = await post('/college/getAllColleges')
@@ -329,9 +321,7 @@ const getAllColleges = async () => {
   }
 }
 
-// ======================
 // 根据学院ID获取专业
-// ======================
 const getMajorsByCollegeId = async (collegeId) => {
   if (!collegeId) {
     majorList.value = []
@@ -367,16 +357,12 @@ const handleCollegeChangeForForm = (val) => {
   getMajorsByCollegeId(val)
 }
 
-// ======================
 // 日期格式化
-// ======================
 const formatDateTime = (row, column) => {
   return formatDate(row.updateTime)
 }
 
-// ======================
 // 获取列表
-// ======================
 const getList = async () => {
   const classesEntity = {
     className: queryParams.className?.trim() || null,

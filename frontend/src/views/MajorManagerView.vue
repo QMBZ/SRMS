@@ -171,10 +171,7 @@ const rules = {
   collegeId: [{ required: true, message: '请选择所属学院', trigger: 'change' }],
 }
 
-// ======================
-// 自动生成专业编码
-// 规则：学院编码 + 自定义后缀（2位）
-// ======================
+// 自动生成专业编码：学院编码 + 自定义后缀（2位）
 const autoGenerateCode = () => {
   if (!collegeCodePrefix.value || !form.majorSuffix) {
     form.majorCode = ''
@@ -184,9 +181,7 @@ const autoGenerateCode = () => {
   form.majorCode = `${collegeCodePrefix.value}${form.majorSuffix}`
 }
 
-// ======================
 // 切换学院 → 自动加载学院编码
-// ======================
 const handleCollegeChange = (collegeId) => {
   if (!collegeId) {
     collegeCodePrefix.value = ''
@@ -208,9 +203,7 @@ const handleCollegeChange = (collegeId) => {
   form.majorCode = ''
 }
 
-// ======================
 // 获取所有学院
-// ======================
 const getAllColleges = async () => {
   try {
     const res = await post('/college/getAllColleges')
@@ -222,16 +215,12 @@ const getAllColleges = async () => {
   }
 }
 
-// ======================
 // 日期格式化
-// ======================
 const formatDateTime = (row, column) => {
   return formatDate(row.updateTime)
 }
 
-// ======================
 // 获取专业列表
-// ======================
 const getList = async () => {
   const params = {
     majorName: queryParams.majorName?.trim() || null,

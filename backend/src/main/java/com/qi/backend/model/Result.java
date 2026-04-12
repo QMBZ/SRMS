@@ -14,10 +14,9 @@ public class Result<T> {
     // 响应数据
     private T data;
 
-    // 私有化构造，禁止外部 new，只能使用静态方法
     private Result() {}
 
-    // ==================== 成功返回 ====================
+    // 成功返回
     public static <T> Result<T> success() {
         Result<T> result = new Result<>();
         result.setCode(200);
@@ -41,7 +40,7 @@ public class Result<T> {
         return result;
     }
 
-    // ==================== 失败返回 ====================
+    // 失败返回
     public static <T> Result<T> error() {
         Result<T> result = new Result<>();
         result.setCode(500);

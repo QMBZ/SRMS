@@ -16,13 +16,13 @@
           unique-opened
           class="sidebar-menu"
         >
-          <!-- ====================== 所有角色通用：个人中心 ====================== -->
+          <!-- 所有角色通用：个人中心 -->
           <el-menu-item index="0" @click="toProfile">
             <el-icon><User /></el-icon>
             <span>个人中心</span>
           </el-menu-item>
 
-          <!-- ====================== 超级管理员 roleId = 1 ====================== -->
+          <!-- 超级管理员 roleId = 1 -->
           <el-sub-menu index="1" v-if="userStore.roleId === 1">
             <template #title>
               <el-icon><Menu /></el-icon>
@@ -47,7 +47,7 @@
             <span>学生管理</span>
           </el-menu-item> -->
 
-          <!-- ====================== 学院管理员 roleId = 2 ====================== -->
+          <!-- 学院管理员 roleId = 2 -->
           <el-menu-item index="3" v-if="userStore.roleId !== 3" @click="toStudentManager">
             <el-icon><User /></el-icon>
             <span>学生管理</span>
@@ -82,7 +82,7 @@
             <span>用户管理</span>
           </el-menu-item> -->
 
-          <!-- ====================== 学生 roleId = 3 ====================== -->
+          <!-- 学生 roleId = 3 -->
           <el-menu-item index="8" v-if="userStore.roleId === 3" @click="toRecord">
             <el-icon><Document /></el-icon>
             <span>我的学籍信息</span>
@@ -292,7 +292,6 @@ const toRecord = () => {
 </style>
 
 <style>
-/* 全局侧边栏样式 */
 .el-menu--vertical {
   border-right: none !important;
 }

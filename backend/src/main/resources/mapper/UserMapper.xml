@@ -39,7 +39,7 @@
         select * from users where status = #{status}
     </select>
 
-    <!-- 分页查询所有用户（配合 PageHelper 使用） -->
+    <!-- 分页查询所有用户 PageHelper -->
     <select id="selectUsersByPage" resultMap="UserResultMap">
         select * from users order by create_time desc
     </select>

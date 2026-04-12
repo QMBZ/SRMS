@@ -203,7 +203,7 @@ public class StudentInfoController {
     }
 
     /**
-     * 下载空模板（文件下载，不需要返回 Result）
+     * 下载空模板 文件下载，不需要返回 Result
      */
     @Operation(summary = "导出模板")
     @PostMapping("/export/template")
@@ -221,7 +221,7 @@ public class StudentInfoController {
     }
 
     /**
-     * 导入 Excel → 批量更新（返回统一 Result）
+     * 导入 Excel → 批量更新 返回统一 Result
      */
     @Operation(summary = "导入学生数据")
     @PostMapping("/import")
@@ -247,7 +247,7 @@ public class StudentInfoController {
     }
 
     /**
-     * Excel 批量新增学生（先创建用户，再创建学生）
+     * Excel 批量新增学生 先创建用户，再创建学生
      */
     @Operation(summary = "Excel批量新增学生")
     @PostMapping("/import/add")
@@ -271,7 +271,7 @@ public class StudentInfoController {
     }
 
     /**
-     * 下载【学生新增】专用空模板
+     * 下载 学生新增 专用空模板
      */
     @Operation(summary = "导出新增学生模板")
     @PostMapping("/export/add/template")

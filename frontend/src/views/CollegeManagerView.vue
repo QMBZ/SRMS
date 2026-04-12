@@ -134,23 +134,17 @@ const rules = {
   ],
 }
 
-// ======================
-// 限制编码只能输入数字
-// ======================
+// 限制只能输入数字
 const handleCodeInput = () => {
   form.collegeCode = form.collegeCode.replace(/\D/g, '')
 }
 
-// ======================
 // 日期格式化
-// ======================
 const formatDateTime = (row, column) => {
   return formatDate(row[column.property])
 }
 
-// ======================
 // 获取学院列表
-// ======================
 const getList = async () => {
   const params = {
     collegeName: queryParams.collegeName?.trim() || null,
@@ -243,9 +237,7 @@ const resetForm = () => {
   formRef.value?.clearValidate()
 }
 
-// ======================
 // 查看该学院的所有专业
-// ======================
 const openMajorList = async (row) => {
   majorDialogVisible.value = true
   majorLoading.value = true

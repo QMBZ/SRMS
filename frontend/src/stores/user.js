@@ -14,9 +14,9 @@ export const useUserStore = defineStore('user', {
     status: 1, // 账号状态 1正常 0禁用
   }),
 
-  // 方法：修改状态
+  // 修改状态
   actions: {
-    // 1. 登录成功后保存所有信息（接口返回数据直接传入）
+    // 登录成功后保存所有信息
     setLoginInfo(data) {
       this.token = data.token
       this.userId = data.userId
@@ -28,19 +28,18 @@ export const useUserStore = defineStore('user', {
       this.status = data.status
     },
 
-    // 2. 退出登录：清空所有信息
+    // 退出登录：清空所有信息
     logout() {
       this.$reset()
     },
 
-    // // 3. 单独更新用户信息（比如修改资料后）
+    // // 单独更新用户信息
     // updateUserInfo(data) {
     //   this.realName = data.realName || this.realName
     //   this.username = data.username || this.username
     // },
   },
 
-  // 持久化：刷新页面不丢失
   persist: true,
 })
 

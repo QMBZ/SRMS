@@ -158,14 +158,13 @@ public class StudentInfoService {
 
     /**
      * 导入 Excel → 批量更新（只修改有值的字段）
-     * 规则：
      * 1. 必须传 studentId
      * 2. 只有 Excel 中有值的字段才更新
      * 3. 空字段不覆盖数据库
      */
     public void importExcel(List<StudentInfo> excelList) {
         for (StudentInfo excel : excelList) {
-            // 必须有 ID 才能更新
+            // 必须传 studentId
             if (excel.getStudentId() == null) {
                 continue;
             }
@@ -175,7 +174,7 @@ public class StudentInfoService {
                 continue;
             }
 
-            // ========== 核心：只覆盖 Excel 里有值的字段 ==========
+            // 只覆盖 Excel 里有值的字段
             if (excel.getStudentNo() != null && !excel.getStudentNo().isEmpty()) {
                 dbStudent.setStudentNo(excel.getStudentNo());
             }
@@ -222,14 +221,13 @@ public class StudentInfoService {
                 dbStudent.setStudentStatus(excel.getStudentStatus());
             }
 
-            // 执行更新（你Mapper本来就是动态更新，完美匹配）
+            // 更新
             studentInfoMapper.updateStudentInfoById(dbStudent);
         }
     }
 
     /**
      * Excel 批量新增学生：先创建用户 → 再创建学生
-     * 规则：
      * 1. 学号必须存在
      * 2. 已存在的学号跳过（不覆盖）
      * 3. 用户默认密码、默认角色3、默认状态1
@@ -239,7 +237,7 @@ public class StudentInfoService {
     public void importAddExcel(List<StudentImportAdd> excelList) {
         for (StudentImportAdd excel : excelList) {
             try {
-                // 1. 基础校验
+                // 校验
                 if (StringUtils.isBlank(excel.getStudentNo())
                         || StringUtils.isBlank(excel.getRealName())
                         || StringUtils.isBlank(excel.getGender())
@@ -251,25 +249,23 @@ public class StudentInfoService {
                     continue; // 必填项为空直接跳过
                 }
 
-                // 2. 判断学号是否已存在（存在则跳过）
+                // 判断学号是否已存在（存在则跳过）
                 StudentInfo exist = studentInfoMapper.selectStudentInfoByStudentNo(excel.getStudentNo());
                 if (exist != null) {
                     continue;
                 }
 
-                // ===================== 3. 先创建用户 =====================
+                // 创建用户
                 User user = new User();
                 user.setUsername(excel.getStudentNo()); // 用户名=学号
                 user.setRealName(excel.getRealName());
-                // 默认值（你表结构里已经有默认，这里可以不设，设了更安全）
+                // 设置默认值
                 user.setRoleId(3);    // 学生角色
                 user.setStatus(1);    // 正常状态
-                // 密码用你表默认的加密串，不用传
-
-                // 调用你现有的新增用户方法
+                // 新增用户
                 userService.addUser(user);
 
-                // ===================== 4. 再创建学生 =====================
+                // 再创建学生
                 StudentInfo student = new StudentInfo();
                 student.setStudentNo(excel.getStudentNo());
                 student.setRealName(excel.getRealName());
@@ -284,11 +280,10 @@ public class StudentInfoService {
                 student.setClassId(excel.getClassId());
                 student.setEnrollmentTime(excel.getEnrollmentTime());
 
-                // 调用你现有的新增学生方法
+                // 新增学生
                 addStudentInfo(student);
 
             } catch (Exception e) {
-                // 单条失败不影响整体
                 e.printStackTrace();
             }
         }

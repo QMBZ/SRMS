@@ -5,7 +5,7 @@
       <p class="tip">通过条件筛选学生，查看对应学生所有课程成绩，仅查看不可修改</p>
     </div>
 
-    <!-- 完全和学生管理一致的查询表单（去掉了新增/导出/导入按钮） -->
+    <!-- 查询表单 -->
     <el-card shadow="hover" class="search-card">
       <el-form :model="queryParams" inline @keyup.enter="getAllStudentThenScore">
         <el-form-item label="学号">
@@ -127,7 +127,7 @@ const pageNum = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 
-// ====================== 基础数据获取 ======================
+// 基础数据获取
 const getAllColleges = async () => {
   try {
     const res = await post('/college/getAllColleges')
@@ -162,13 +162,13 @@ const getAllStudentStatus = async () => {
   }
 }
 
-// ====================== 学院切换 ======================
+// 学院切换
 const handleCollegeChangeForQuery = (val) => {
   queryParams.majorId = ''
   getMajorsByCollegeId(val)
 }
 
-// ====================== 核心：查询【所有】学生 → 查成绩 → 前端分页 ======================
+// 查询 所有 学生 → 查成绩 → 前端分页
 const getAllStudentThenScore = async () => {
   const params = {
     studentNo: queryParams.studentNo?.trim() || null,
@@ -183,7 +183,7 @@ const getAllStudentThenScore = async () => {
   pageNum.value = 1 // 查询重置到第一页
 
   try {
-    // 1. 一次性查【所有符合条件的学生】，不传 pageSize / pageNum，或传极大值
+    // 一次性查 所有符合条件的学生
     const studentRes = await post('/student/getStudentInfoByConditionPage', params, {
       params: { pageNum: 1, pageSize: 9999 }, // 一次性拉取所有学生
     })
@@ -198,7 +198,7 @@ const getAllStudentThenScore = async () => {
 
     const studentList = studentRes.data.list
 
-    // 2. 批量获取所有学生的成绩
+    // 批量获取所有学生的成绩
     let finalScoreList = []
     for (let student of studentList) {
       const collegeName = await getCollegeById(student.collegeId)
@@ -217,12 +217,12 @@ const getAllStudentThenScore = async () => {
       }
     }
 
-    // 3. 保存全部成绩
+    // 保存全部成绩
     scoreListAll.value = finalScoreList
     total.value = finalScoreList.length
     ElMessage.success(`查询到 ${finalScoreList.length} 条成绩`)
 
-    // 4. 前端分页刷新
+    // 前端分页刷新
     refreshPageData()
   } catch (err) {
     console.error('查询异常', err)
@@ -232,14 +232,14 @@ const getAllStudentThenScore = async () => {
   }
 }
 
-// ====================== 前端分页刷新 ======================
+// 前端分页刷新
 const refreshPageData = () => {
   const start = (pageNum.value - 1) * pageSize.value
   const end = start + pageSize.value
   scoreListPage.value = scoreListAll.value.slice(start, end)
 }
 
-// ====================== 根据ID获取名称 ======================
+// 根据ID获取名称
 const getCollegeById = async (collegeId) => {
   try {
     const res = await post('/college/getCollegeById', collegeId)
@@ -258,7 +258,7 @@ const getMajorById = async (majorId) => {
   }
 }
 
-// ====================== 重置查询 ======================
+// 重置查询
 const resetQuery = () => {
   Object.assign(queryParams, {
     studentNo: '',
@@ -277,7 +277,7 @@ const resetQuery = () => {
   total.value = 0
 }
 
-// ====================== 学院管理员数据 ======================
+// 学院管理员数据
 const getCollegeAdminCollege = async () => {
   try {
     const res = await post('/adminCollege/getByUserId', userStore.userId)
@@ -291,7 +291,7 @@ const getCollegeAdminCollege = async () => {
   }
 }
 
-// 分页切换（只控制前端展示）
+// 分页切换
 const handleSizeChange = (val) => {
   pageSize.value = val
   refreshPageData()
@@ -301,7 +301,7 @@ const handleCurrentChange = (val) => {
   refreshPageData()
 }
 
-// ====================== 导出成绩模板 ======================
+// 导出成绩模板
 const handleExportScoreTemplate = async () => {
   try {
     loading.value = true
@@ -322,7 +322,7 @@ const handleExportScoreTemplate = async () => {
   }
 }
 
-// ====================== 导入成绩 ======================
+// 导入成绩
 const handleImportScore = () => {
   const input = document.createElement('input')
   input.type = 'file'
@@ -356,7 +356,7 @@ const handleImportScore = () => {
   input.click()
 }
 
-// ====================== 初始化 ======================
+// 初始化
 onMounted(async () => {
   if (userStore.roleId === 3) {
     ElMessage.warning('无访问权限')

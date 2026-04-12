@@ -223,7 +223,7 @@
           </el-col>
         </el-row>
 
-        <!-- 自动生成的年级（只读） -->
+        <!-- 自动生成的年级 -->
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="年级">
@@ -357,7 +357,6 @@ const rules = {
   enrollmentTime: [{ required: true, message: '请选择入学时间', trigger: 'change' }],
 }
 
-// ====================== 核心接口 ======================
 const getCollegeById = async (collegeId) => {
   try {
     const res = await post('/college/getCollegeById', collegeId)
@@ -385,7 +384,7 @@ const getClassById = async (classId) => {
   }
 }
 
-// ====================== 新增：获取学院管理员管理的学院 ======================
+// 获取学院管理员管理的学院
 const getCollegeAdminCollege = async () => {
   try {
     const res = await post('/adminCollege/getByUserId', userStore.userId)
@@ -403,7 +402,7 @@ const getCollegeAdminCollege = async () => {
   }
 }
 
-// ====================== 基础数据获取 ======================
+// 数据获取
 const getAllColleges = async () => {
   try {
     const res = await post('/college/getAllColleges')
@@ -453,7 +452,7 @@ const getAllStudentStatus = async () => {
   }
 }
 
-// ====================== 级联切换 ======================
+// 级联切换
 const handleCollegeChangeForQuery = (val) => {
   queryParams.majorId = ''
   getMajorsByCollegeId(val)
@@ -487,7 +486,7 @@ const handleClassChange = () => {
   autoSetGradeFromClass()
 }
 
-// ====================== 自动设置年级（从classCode前4位） ======================
+// 自动设置年级 从classCode前4位
 const autoSetGradeFromClass = () => {
   const { classId } = form
   if (!classId) return
@@ -499,7 +498,7 @@ const autoSetGradeFromClass = () => {
   form.grade = currentClass.classCode.substring(0, 4)
 }
 
-// ====================== 学号自动生成（班级code + 序号） ======================
+// 学号自动生成 班级code + 序号
 const autoGenerateStudentNo = () => {
   const { classId, studentSeq } = form
   if (!classId || !studentSeq) return
@@ -511,7 +510,7 @@ const autoGenerateStudentNo = () => {
   form.studentNo = `${currentClass.classCode}${seqStr}`
 }
 
-// ====================== 表格 ======================
+// 表格
 const getStatusTagType = (status) => {
   const map = {
     在读: 'success',
@@ -596,7 +595,7 @@ const resetQuery = () => {
   getList()
 }
 
-// ====================== 新增/编辑 ======================
+// 新增/编辑
 const openAdd = () => {
   isEdit.value = false
   dialogVisible.value = true
@@ -676,7 +675,7 @@ const handleExport = async () => {
       studentStatus: queryParams.studentStatus || null,
     }
 
-    // 调用后端导出接口（文件流下载）
+    // 调用后端导出接口 文件流下载
     const res = await post('/student/export/condition', params, {
       responseType: 'blob', // 必须加，文件下载
     })
@@ -755,7 +754,7 @@ const handleExportTemplate = async () => {
   }
 }
 
-// 批量添加学生（导入新增专用）
+// 批量添加学生
 const handleImportAdd = () => {
   const input = document.createElement('input')
   input.type = 'file'
@@ -787,7 +786,7 @@ const handleImportAdd = () => {
   input.click()
 }
 
-// ====================== 初始化 ======================
+// 初始化
 onMounted(async () => {
   // 学生角色拦截
   if (userStore.roleId === 3) {

@@ -117,7 +117,7 @@ const queryParams = reactive({
   majorId: '',
 })
 
-// ====================== 纯前端分页参数 ======================
+// 纯前端分页参数
 const pageNum = ref(1) // 当前页
 const pageSize = ref(10) // 每页条数
 const total = computed(() => allTableData.value.length) // 总条数
@@ -129,9 +129,8 @@ const pagedTableData = computed(() => {
   return allTableData.value.slice(start, end)
 })
 
-// ====================== 核心接口（完全没改参数！） ======================
 /**
- * 获取毕业资格列表（原样不动，只拿全部数据）
+ * 获取毕业资格列表
  */
 const getList = async () => {
   const params = {
@@ -177,10 +176,10 @@ const handleGraduate = async (row) => {
   }
 }
 
-// ====================== 前端分页切换事件 ======================
+// 前端分页切换事件
 const handleFrontPageChange = () => {}
 
-// ====================== 基础数据 ======================
+// 基础数据
 const getAllColleges = async () => {
   try {
     const res = await post('/college/getAllColleges')
@@ -206,13 +205,13 @@ const getMajorsByCollegeId = async (collegeId) => {
   }
 }
 
-// ====================== 级联切换 ======================
+// 级联切换
 const handleCollegeChange = (val) => {
   queryParams.majorId = ''
   getMajorsByCollegeId(val)
 }
 
-// ====================== 重置查询 ======================
+// 重置查询
 const resetQuery = () => {
   queryParams.majorId = ''
   if (isCollegeAdmin.value) {
@@ -224,7 +223,7 @@ const resetQuery = () => {
   getList()
 }
 
-// ====================== 学院管理员自动绑定学院 ======================
+// 学院管理员自动绑定学院
 const getCollegeAdminCollege = async () => {
   try {
     const res = await post('/adminCollege/getByUserId', userStore.userId)
@@ -238,7 +237,7 @@ const getCollegeAdminCollege = async () => {
   }
 }
 
-// ====================== 初始化 ======================
+// 初始化
 onMounted(async () => {
   // 学生无权限
   if (userStore.roleId === 3) {

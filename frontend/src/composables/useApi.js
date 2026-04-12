@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/user' // pinia
 // 创建实例
 const instance = axios.create({
   baseURL: '/api',
-  timeout: 5000,
+  timeout: 125000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -53,7 +53,7 @@ instance.interceptors.response.use(
   },
 )
 
-// 导出：只暴露 post
+// 导出 只开放post
 export function useApi() {
   return {
     post: (url, data = {}, config = {}) => instance.post(url, data, config),

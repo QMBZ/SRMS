@@ -89,9 +89,7 @@ import { useUserStore } from '@/stores/user'
 import { getRoleId } from '@/utils/jwt.js'
 import { useRouter } from 'vue-router'
 
-// ======================
-// 1. 初始化数据与 Store
-// ======================
+// 初始化数据与 Store
 const router = useRouter()
 const userStore = useUserStore()
 const { post } = useApi()
@@ -120,9 +118,7 @@ const pwdForm = reactive({
   confirmPassword: '',
 })
 
-// ======================
-// 2. 校验规则
-// ======================
+// 校验
 const validateConfirm = (rule, value, callback) => {
   if (value !== pwdForm.newPassword) {
     callback(new Error('两次输入密码不一致'))
@@ -143,9 +139,7 @@ const rules = {
   ],
 }
 
-// ======================
-// 新增：角色ID映射角色名称的工具函数
-// ======================
+// 角色ID映射角色名称的工具函数
 const mapRoleIdToName = (roleId) => {
   // 定义角色映射关系：1=超级管理员，2=学院管理员，3=学生
   const roleMap = {
@@ -157,9 +151,7 @@ const mapRoleIdToName = (roleId) => {
   return roleMap[roleId] || '暂无'
 }
 
-// ======================
-// 新增：角色ID映射样式类（对应不同颜色）
-// ======================
+// 角色ID映射样式类（对应不同颜色）
 const getRoleClass = (roleId) => {
   const roleClassMap = {
     1: 'status-super', // 超级管理员-紫色
@@ -169,9 +161,7 @@ const getRoleClass = (roleId) => {
   return roleClassMap[roleId] || 'status-student' // 默认学生样式
 }
 
-// ======================
-// 3. 获取用户信息
-// ======================
+// 获取用户信息
 const getUserProfile = async () => {
   const userNo = userStore.username
   if (!userNo) {
@@ -198,13 +188,12 @@ const getUserProfile = async () => {
 
   try {
     // 当用户不为学生时，只设置学院名称
-    // 假设：userInfo是reactive对象，collegeName是ref变量
-    // 核心：先转字符串，再替换，空值兜底为''
+    // 先转字符串，再替换，空值兜底为''
     collegeName.value = (userInfo.value.realName || '').toString().replace(/管理员$/, '')
 
-    // 超级管理员特殊处理：学院名称直接赋值为学校（补充逻辑）
+    // 超级管理员处理：学院名称直接赋值为学校
     if (userInfo.value.roleId === 1) {
-      collegeName.value = '本校' // 可根据需求修改为具体学校名，比如'XX大学'
+      collegeName.value = '本校'
     }
 
     if (userInfo.value.roleId === 3) {
@@ -243,9 +232,7 @@ const getCollegeName = async (collegeId) => {
   }
 }
 
-// ======================
-// 4. 修改密码逻辑
-// ======================
+// 修改密码逻辑
 const handleUpdatePassword = () => {
   pwdFormRef.value.validate(async (valid) => {
     if (valid) {
@@ -290,7 +277,6 @@ onMounted(() => getUserProfile())
 </script>
 
 <style scoped>
-/* 深度复用 RecordView.vue 的样式 */
 .personal-center {
   padding: 24px;
   background-color: #f5f7fa;
@@ -383,7 +369,6 @@ onMounted(() => getUserProfile())
   margin-top: 20px;
 }
 
-/* 覆盖 ElementPlus 表格样式使其与 RecordView 一致 */
 :deep(.el-descriptions-item__cell) {
   padding: 14px 16px !important;
 }

@@ -80,14 +80,14 @@ public class ScoreService {
     public void importScoreExcel(List<ScoreImportExcel> excelList) {
         for (ScoreImportExcel excel : excelList) {
             try {
-                // 1. 必填校验
+                // 校验
                 if (StringUtils.isBlank(excel.getStudentNo())
                         || StringUtils.isBlank(excel.getCourseName())
                         || excel.getScore() == null) {
                     continue;
                 }
 
-                // 2. 查询是否已存在（学号+课程名 唯一）
+                // 查询是否已存在（学号+课程名）
                 Score exist = scoreMapper.selectByStudentNoAndCourseName(
                         excel.getStudentNo(),
                         excel.getCourseName()
@@ -107,7 +107,6 @@ public class ScoreService {
                 }
 
             } catch (Exception e) {
-                // 单条失败不影响整体
                 e.printStackTrace();
             }
         }
