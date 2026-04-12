@@ -2,12 +2,12 @@
   <div class="score-management">
     <div class="page-header">
       <h2>学生成绩管理</h2>
-      <p class="tip">通过条件筛选学生，查看对应学生所有课程成绩，仅查看不可修改</p>
+      <p class="tip">通过条件筛选学生，点击查看成绩按钮查看该生所有课程成绩，仅查看不可修改</p>
     </div>
 
     <!-- 查询表单 -->
     <el-card shadow="hover" class="search-card">
-      <el-form :model="queryParams" inline @keyup.enter="getAllStudentThenScore">
+      <el-form :model="queryParams" inline @keyup.enter="handleQuery">
         <el-form-item label="学号">
           <el-input v-model="queryParams.studentNo" placeholder="请输入学号" clearable />
         </el-form-item>
@@ -42,13 +42,8 @@
             <el-option v-for="item in majorList" :key="item.majorId" :label="item.majorName" :value="item.majorId" />
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="学籍状态">
-          <el-select v-model="queryParams.studentStatus" placeholder="选择状态" clearable style="width: 140px">
-            <el-option v-for="item in statusList" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" @click="getAllStudentThenScore">查询</el-button>
+          <el-button type="primary" @click="handleQuery">查询</el-button>
           <el-button @click="resetQuery">重置</el-button>
           <el-button type="info" @click="handleExportScoreTemplate">导出模板</el-button>
           <el-button type="success" @click="handleImportScore">导入成绩</el-button>
@@ -56,32 +51,49 @@
       </el-form>
     </el-card>
 
-    <!-- 成绩表格：学号、姓名、学院、专业、课程、成绩 -->
+    <!-- 学生列表表格（后端分页） -->
     <el-card shadow="hover" class="table-card" v-loading="loading">
-      <el-table :data="scoreListPage" border stripe header-align="center" align="center" empty-text="暂无成绩数据">
+      <el-table :data="studentList" border stripe header-align="center" align="center" empty-text="暂无学生数据">
         <el-table-column label="学号" prop="studentNo" min-width="160" />
         <el-table-column label="姓名" prop="realName" min-width="100" />
         <el-table-column label="学院" prop="collegeName" min-width="150" />
         <el-table-column label="专业" prop="majorName" min-width="150" />
-        <el-table-column label="课程" prop="courseName" min-width="200" />
-        <el-table-column label="成绩" prop="score" width="120">
+        <el-table-column label="操作" width="140">
+          <template #default="scope">
+            <el-button type="primary" size="small" @click="openScoreDialog(scope.row)"> 查看成绩 </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 后端分页 -->
+      <el-pagination
+        v-model:current-page="queryParams.pageNum"
+        v-model:page-size="queryParams.pageSize"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleQuery"
+        @current-change="handleQuery"
+        class="pagination"
+      />
+    </el-card>
+
+    <!-- 成绩弹窗 -->
+    <el-dialog
+      v-model="scoreDialogVisible"
+      :title="`${scoreDialogTitle} - 课程成绩列表`"
+      width="560px"
+      append-to-body
+      :close-on-click-modal="false"
+    >
+      <el-table :data="studentScoreList" border stripe header-align="center" align="center" empty-text="该生暂无成绩">
+        <el-table-column label="课程名称" prop="courseName" min-width="280" />
+        <el-table-column label="成绩" prop="score" min-width="280">
           <template #default="scope">
             <span>{{ parseFloat(scope.row.score).toFixed(2) }}</span>
           </template>
         </el-table-column>
       </el-table>
-
-      <!-- 分页 -->
-      <el-pagination
-        v-model:current-page="pageNum"
-        v-model:page-size="pageSize"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        class="pagination"
-      />
-    </el-card>
+    </el-dialog>
   </div>
 </template>
 
@@ -99,35 +111,52 @@ const { post } = useApi()
 // 加载状态
 const loading = ref(false)
 
-// 全部成绩列表（原始数据）
-const scoreListAll = ref([])
-// 分页后的成绩列表（展示用）
-const scoreListPage = ref([])
+// 学生列表（后端分页）
+const studentList = ref([])
+const total = ref(0)
 
 // 字典数据
 const collegeList = ref([])
 const majorList = ref([])
-const statusList = ref([])
 
 // 角色标记
 const isCollegeAdmin = ref(false)
 const collegeAdminCollegeId = ref('')
 
-// 查询条件
+// 查询条件 + 分页参数
 const queryParams = reactive({
   studentNo: '',
   realName: '',
   collegeId: '',
   majorId: '',
-  studentStatus: '',
+  studentStatus: '在读',
+  pageNum: 1,
+  pageSize: 10,
 })
 
-// 分页参数（现在只控制前端成绩展示分页）
-const pageNum = ref(1)
-const pageSize = ref(10)
-const total = ref(0)
+// ================== 成绩弹窗相关 ==================
+const scoreDialogVisible = ref(false)
+const scoreDialogTitle = ref('')
+const studentScoreList = ref([])
 
-// 基础数据获取
+// 打开成绩弹窗
+const openScoreDialog = async (row) => {
+  scoreDialogVisible.value = true
+  scoreDialogTitle.value = `${row.realName} (${row.studentNo})`
+  studentScoreList.value = []
+
+  try {
+    const res = await post('/score/getScoresByStudentNo', row.studentNo)
+    if (res.code === 200 && res.data) {
+      studentScoreList.value = res.data
+    }
+  } catch (err) {
+    console.error('获取成绩失败', err)
+    ElMessage.error('获取成绩失败')
+  }
+}
+
+// ================== 基础数据 ==================
 const getAllColleges = async () => {
   try {
     const res = await post('/college/getAllColleges')
@@ -153,92 +182,6 @@ const getMajorsByCollegeId = async (collegeId) => {
   }
 }
 
-const getAllStudentStatus = async () => {
-  try {
-    const res = await post('/student/getAllStudentStatus')
-    if (res.code === 200) statusList.value = res.data || []
-  } catch (err) {
-    console.error('获取学籍状态失败', err)
-  }
-}
-
-// 学院切换
-const handleCollegeChangeForQuery = (val) => {
-  queryParams.majorId = ''
-  getMajorsByCollegeId(val)
-}
-
-// 查询 所有 学生 → 查成绩 → 前端分页
-const getAllStudentThenScore = async () => {
-  const params = {
-    studentNo: queryParams.studentNo?.trim() || null,
-    realName: queryParams.realName?.trim() || null,
-    collegeId: queryParams.collegeId ? Number(queryParams.collegeId) : null,
-    majorId: queryParams.majorId ? Number(queryParams.majorId) : null,
-    studentStatus: '在读',
-  }
-
-  loading.value = true
-  scoreListAll.value = []
-  pageNum.value = 1 // 查询重置到第一页
-
-  try {
-    // 一次性查 所有符合条件的学生
-    const studentRes = await post('/student/getStudentInfoByConditionPage', params, {
-      params: { pageNum: 1, pageSize: 9999 }, // 一次性拉取所有学生
-    })
-
-    if (studentRes.code !== 200 || !studentRes.data.list.length) {
-      ElMessage.warning('未查询到符合条件的学生')
-      scoreListPage.value = []
-      total.value = 0
-      loading.value = false
-      return
-    }
-
-    const studentList = studentRes.data.list
-
-    // 批量获取所有学生的成绩
-    let finalScoreList = []
-    for (let student of studentList) {
-      const collegeName = await getCollegeById(student.collegeId)
-      const majorName = await getMajorById(student.majorId)
-
-      const scoreRes = await post('/score/getScoresByStudentNo', student.studentNo)
-      if (scoreRes.code === 200 && scoreRes.data?.length) {
-        const scores = scoreRes.data.map((item) => ({
-          ...item,
-          studentNo: student.studentNo,
-          realName: student.realName,
-          collegeName: collegeName,
-          majorName: majorName,
-        }))
-        finalScoreList = [...finalScoreList, ...scores]
-      }
-    }
-
-    // 保存全部成绩
-    scoreListAll.value = finalScoreList
-    total.value = finalScoreList.length
-    ElMessage.success(`查询到 ${finalScoreList.length} 条成绩`)
-
-    // 前端分页刷新
-    refreshPageData()
-  } catch (err) {
-    console.error('查询异常', err)
-    ElMessage.error('查询失败')
-  } finally {
-    loading.value = false
-  }
-}
-
-// 前端分页刷新
-const refreshPageData = () => {
-  const start = (pageNum.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  scoreListPage.value = scoreListAll.value.slice(start, end)
-}
-
 // 根据ID获取名称
 const getCollegeById = async (collegeId) => {
   try {
@@ -248,7 +191,6 @@ const getCollegeById = async (collegeId) => {
     return '未知学院'
   }
 }
-
 const getMajorById = async (majorId) => {
   try {
     const res = await post('/major/getMajorById', majorId)
@@ -258,13 +200,57 @@ const getMajorById = async (majorId) => {
   }
 }
 
-// 重置查询
+// 学院切换
+const handleCollegeChangeForQuery = (val) => {
+  queryParams.majorId = ''
+  getMajorsByCollegeId(val)
+}
+
+// ================== 后端分页查询学生 ==================
+const handleQuery = async () => {
+  const params = {
+    studentNo: queryParams.studentNo?.trim() || null,
+    realName: queryParams.realName?.trim() || null,
+    collegeId: queryParams.collegeId ? Number(queryParams.collegeId) : null,
+    majorId: queryParams.majorId ? Number(queryParams.majorId) : null,
+    studentStatus: queryParams.studentStatus,
+  }
+
+  loading.value = true
+  try {
+    const res = await post('/student/getStudentInfoByConditionPage', params, {
+      params: {
+        pageNum: queryParams.pageNum,
+        pageSize: queryParams.pageSize,
+      },
+    })
+    if (res.code === 200) {
+      let list = res.data.list || []
+      // 修复：给每个学生赋值学院名称、专业名称
+      for (let item of list) {
+        item.collegeName = await getCollegeById(item.collegeId)
+        item.majorName = await getMajorById(item.majorId)
+      }
+      studentList.value = list
+      total.value = res.data.total || 0
+    }
+  } catch (err) {
+    console.error('查询学生失败', err)
+    ElMessage.error('查询失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+// ================== 重置查询 ==================
 const resetQuery = () => {
   Object.assign(queryParams, {
     studentNo: '',
     realName: '',
     majorId: '',
-    studentStatus: '',
+    studentStatus: '在读',
+    pageNum: 1,
+    pageSize: 10,
   })
   if (isCollegeAdmin.value) {
     queryParams.collegeId = collegeAdminCollegeId.value
@@ -272,12 +258,11 @@ const resetQuery = () => {
     queryParams.collegeId = ''
   }
   majorList.value = []
-  scoreListAll.value = []
-  scoreListPage.value = []
+  studentList.value = []
   total.value = 0
 }
 
-// 学院管理员数据
+// ================== 学院管理员 ==================
 const getCollegeAdminCollege = async () => {
   try {
     const res = await post('/adminCollege/getByUserId', userStore.userId)
@@ -291,17 +276,7 @@ const getCollegeAdminCollege = async () => {
   }
 }
 
-// 分页切换
-const handleSizeChange = (val) => {
-  pageSize.value = val
-  refreshPageData()
-}
-const handleCurrentChange = (val) => {
-  pageNum.value = val
-  refreshPageData()
-}
-
-// 导出成绩模板
+// ================== 导出/导入 ==================
 const handleExportScoreTemplate = async () => {
   try {
     loading.value = true
@@ -322,7 +297,6 @@ const handleExportScoreTemplate = async () => {
   }
 }
 
-// 导入成绩
 const handleImportScore = () => {
   const input = document.createElement('input')
   input.type = 'file'
@@ -341,7 +315,7 @@ const handleImportScore = () => {
       })
       if (res.code === 200) {
         ElMessage.success(res.msg || '成绩导入成功')
-        getAllStudentThenScore() // 导入后刷新成绩列表
+        handleQuery()
       } else {
         ElMessage.error(res.msg || '导入失败')
       }
@@ -356,7 +330,7 @@ const handleImportScore = () => {
   input.click()
 }
 
-// 初始化
+// ================== 初始化 ==================
 onMounted(async () => {
   if (userStore.roleId === 3) {
     ElMessage.warning('无访问权限')
@@ -367,13 +341,12 @@ onMounted(async () => {
   isCollegeAdmin.value = userStore.roleId === 2
 
   await getAllColleges()
-  await getAllStudentStatus()
 
   if (isCollegeAdmin.value) {
     await getCollegeAdminCollege()
   }
 
-  // getAllStudentThenScore()
+  handleQuery()
 })
 </script>
 
