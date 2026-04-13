@@ -1,71 +1,50 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
-import { useUserStore } from '@/stores/user' // pinia
-
-import LoginView from '@/views/LoginView.vue'
-import MainView from '@/views/MainView.vue'
-import RecordView from '@/views/RecordView.vue'
-import AdminCollege from '@/views/AdminCollege.vue'
-import HomeView from '@/views/HomeView.vue'
-import ProfileView from '@/views/ProfileView.vue'
-import ClassesManagerView from '@/views/ClassesManagerView.vue'
-import MajorManagerView from '@/views/MajorManagerView.vue'
-import CollegeManagerView from '@/views/CollegeManagerView.vue'
-import UserManagerView from '@/views/UserManagerView.vue'
-import StudentManagerView from '@/views/StudentManagerView.vue'
-import ScoreView from '@/views/ScoreView.vue'
-import ScoreManagerView from '@/views/ScoreManagerView.vue'
-import GraduateManagerView from '@/views/GraduateManagerView.vue'
-
-const routes = [
-  {
-    path: '/',
-    component: MainView,
-    children: [
-      { path: '', component: HomeView },
-      { path: 'record', component: RecordView },
-      { path: 'admin-college', component: AdminCollege },
-      { path: 'class-manager', component: ClassesManagerView },
-      { path: 'major-manager', component: MajorManagerView },
-      { path: 'college-manager', component: CollegeManagerView },
-      { path: 'user-manager', component: UserManagerView },
-      { path: 'student-manager', component: StudentManagerView },
-      { path: 'profile', component: ProfileView },
-      { path: 'score', component: ScoreView },
-      { path: 'score-manager', component: ScoreManagerView },
-      { path: 'graduate-manager', component: GraduateManagerView },
-    ],
-    meta: { requiresAuth: true },
-  },
-
-  {
-    path: '/login',
-    component: LoginView,
-    meta: { requiresAuth: false }, // 不需要登录就能访问
-  },
-]
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      component: () => import('@/views/MainView.vue'), // 动态导入
+      children: [
+        { path: '', component: () => import('@/views/HomeView.vue') },
+        { path: 'record', component: () => import('@/views/RecordView.vue') },
+        { path: 'admin-college', component: () => import('@/views/AdminCollege.vue') },
+        { path: 'class-manager', component: () => import('@/views/ClassesManagerView.vue') },
+        { path: 'major-manager', component: () => import('@/views/MajorManagerView.vue') },
+        { path: 'college-manager', component: () => import('@/views/CollegeManagerView.vue') },
+        { path: 'user-manager', component: () => import('@/views/UserManagerView.vue') },
+        { path: 'student-manager', component: () => import('@/views/StudentManagerView.vue') },
+        { path: 'profile', component: () => import('@/views/ProfileView.vue') },
+        { path: 'score', component: () => import('@/views/ScoreView.vue') },
+        { path: 'score-manager', component: () => import('@/views/ScoreManagerView.vue') },
+        { path: 'graduate-manager', component: () => import('@/views/GraduateManagerView.vue') },
+      ],
+      meta: { requiresAuth: true },
+    },
+
+    {
+      path: '/login',
+      component: () => import('@/views/LoginView.vue'), // 动态导入
+      meta: { requiresAuth: false },
+    },
+  ],
 })
 
-// 路由守卫：判断是否登录
+// 路由守卫
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
-  console.log(userStore)
   const hasToken = !!userStore.token
-  console.log('hasToken', hasToken)
 
-  // 需要登录的页面
   if (to.meta.requiresAuth) {
     if (hasToken) {
-      next() // 已登录，放行
+      next()
     } else {
-      next('/login') // 未登录，跳登录
+      next('/login')
     }
   } else {
-    next() // 不需要登录，直接放行
+    next()
   }
 })
 

@@ -51,7 +51,7 @@
       </el-form>
     </el-card>
 
-    <!-- 学生列表表格（后端分页） -->
+    <!-- 学生列表表格 -->
     <el-card shadow="hover" class="table-card" v-loading="loading">
       <el-table :data="studentList" border stripe header-align="center" align="center" empty-text="暂无学生数据">
         <el-table-column label="学号" prop="studentNo" min-width="160" />
@@ -226,7 +226,7 @@ const handleQuery = async () => {
     })
     if (res.code === 200) {
       let list = res.data.list || []
-      // 修复：给每个学生赋值学院名称、专业名称
+      // 给每个学生赋值学院名称、专业名称
       for (let item of list) {
         item.collegeName = await getCollegeById(item.collegeId)
         item.majorName = await getMajorById(item.majorId)
